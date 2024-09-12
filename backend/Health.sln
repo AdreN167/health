@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{759E7FC0-4EF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{00D32262-46E8-4B31-95E5-BE4EDB3660EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Health.Api", "Health.Api\Health.Api.csproj", "{F0AEF5E1-DE54-4CA9-886D-FD0A32F1B034}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Health.Api", "Health.Api\Health.Api.csproj", "{F0AEF5E1-DE54-4CA9-886D-FD0A32F1B034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Health.DAL", "Health.DAL\Health.DAL.csproj", "{ECA533A1-7637-4B3E-865A-340441053BA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Health.DAL", "Health.DAL\Health.DAL.csproj", "{ECA533A1-7637-4B3E-865A-340441053BA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Health.Domain", "Health.Domain\Health.Domain.csproj", "{44BE2665-D551-45C9-9CDD-BAABD893179A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Health.Domain", "Health.Domain\Health.Domain.csproj", "{44BE2665-D551-45C9-9CDD-BAABD893179A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Health.Core", "Health.Core\Health.Core.csproj", "{6D8CA899-06B0-4961-A307-7A9C0A19BFA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Health.Core", "Health.Core\Health.Core.csproj", "{6D8CA899-06B0-4961-A307-7A9C0A19BFA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

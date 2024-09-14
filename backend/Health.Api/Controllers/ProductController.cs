@@ -5,6 +5,7 @@ using Health.Core.Features.Products.Dto;
 using Health.Core.Features.Products.Queries.Get;
 using Health.Domain.Models.Response;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Health.Api.Controllers;
@@ -28,6 +29,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
+    [Authorize]
     [HttpPost("CreateProduct")]
     public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromBody] CreateProductCommand request)
     {
@@ -37,6 +39,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
+    [Authorize]
     [HttpPut("UpdateProduct")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromBody] UpdateProductCommand request)
     {
@@ -46,6 +49,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
+    [Authorize]
     [HttpDelete("DeleteProduct/{id}")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> DeleteProduct(long id)
     {

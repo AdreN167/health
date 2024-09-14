@@ -7,6 +7,7 @@ using Health.Domain.Models.Response;
 using Health.Core.Features.Dishes.Commands.Update;
 using Health.Core.Features.Dishes.Commands.Delete;
 using Health.Core.Features.Dishes.Queries.GetExtendedDishById;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Health.Api.Controllers;
 [Route("api/[controller]")]
@@ -38,6 +39,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
+    [Authorize]
     [HttpPost("CreateDish")]
     public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromBody] CreateDishCommand request)
     {
@@ -47,6 +49,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
+    [Authorize]
     [HttpPut("UpdateDish")]
     public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromBody] UpdateDishCommand request)
     {
@@ -56,6 +59,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
+    [Authorize]
     [HttpDelete("DeleteDish/{id}")]
     public async Task<ActionResult<BaseResponse<long>>> DeleteDish(long id)
     {

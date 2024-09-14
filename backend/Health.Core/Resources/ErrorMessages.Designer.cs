@@ -79,11 +79,29 @@ namespace Health.Core.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Invalid client request.
+        /// </summary>
+        internal static string InvalidClientRequest {
+            get {
+                return ResourceManager.GetString("InvalidClientRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Request has some invalid values.
         /// </summary>
         internal static string InvalidRequest {
             get {
                 return ResourceManager.GetString("InvalidRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Token is invalid.
+        /// </summary>
+        internal static string InvalidToken {
+            get {
+                return ResourceManager.GetString("InvalidToken", resourceCulture);
             }
         }
         
@@ -97,11 +115,47 @@ namespace Health.Core.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Passwords are not equal.
+        /// </summary>
+        internal static string PasswordsAreNotEqual {
+            get {
+                return ResourceManager.GetString("PasswordsAreNotEqual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Product is not found.
         /// </summary>
         internal static string ProductNotFound {
             get {
                 return ResourceManager.GetString("ProductNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User is already exists.
+        /// </summary>
+        internal static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на User is not found.
+        /// </summary>
+        internal static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Password is wrong.
+        /// </summary>
+        internal static string WrongPassword {
+            get {
+                return ResourceManager.GetString("WrongPassword", resourceCulture);
             }
         }
     }

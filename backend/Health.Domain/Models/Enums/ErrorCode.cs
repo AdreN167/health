@@ -14,5 +14,11 @@ public enum ErrorCode
 
     // Product
     ProductNotFound = 21,
+
+    // User
+    UserNotFound = 31,
+    WrongPassword = 32,
+    PasswordsAreNotEqual = 33,
+    UserAlreadyExists = 34,
 }
 

@@ -123,13 +123,31 @@
   <data name="InternalServerError" xml:space="preserve">
     <value>Internal server error</value>
   </data>
+  <data name="InvalidClientRequest" xml:space="preserve">
+    <value>Invalid client request</value>
+  </data>
   <data name="InvalidRequest" xml:space="preserve">
     <value>Request has some invalid values</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>Token is invalid</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Not found</value>
   </data>
+  <data name="PasswordsAreNotEqual" xml:space="preserve">
+    <value>Passwords are not equal</value>
+  </data>
   <data name="ProductNotFound" xml:space="preserve">
     <value>Product is not found</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>User is already exists</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User is not found</value>
+  </data>
+  <data name="WrongPassword" xml:space="preserve">
+    <value>Password is wrong</value>
   </data>
 </root>

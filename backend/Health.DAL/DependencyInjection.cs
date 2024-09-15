@@ -8,7 +8,7 @@ public static class DependencyInjection
 {
     public static void AddDAL(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString("PostreSQL");
         var redisConnectionString = configuration.GetConnectionString("Redis");
 
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));

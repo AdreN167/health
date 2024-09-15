@@ -12,6 +12,7 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(typeof(MappingProfile));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        services.AddSignalR();
 
         services.AddServices();
     }

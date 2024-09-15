@@ -1,8 +1,20 @@
 services:
   health.cache:
     image: redis
-    container_name: cache
+    container_name: health.cache
     restart: always
     ports:
       - "6379:6379"
+  
+  health.database:
+    image: postgres:latest
+    container_name: health.database
+    environment:
+      - POSTGRES_DB=healthdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/health-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
   

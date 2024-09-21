@@ -18,3 +18,12 @@ services:
     ports:
       - "5432:5432"
   
+  health.console:
+    image: ${DOCKER_REGISTRY-}health.console
+    container_name: health.console
+    build:
+      context: .
+      dockerfile: Health.ConsoleCommand/Dockerfile
+    stdin_open: true
+    tty: true        
+  

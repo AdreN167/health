@@ -4,8 +4,7 @@ using Health.ConsoleCommand.Interfaces;
 var commands = new Dictionary<string, ICustomCommand>()
 {
     { "exit", new ExitCommand() },
-    { "create-user", new AddUserCommand() },
-    { "help", new HelpCommand() },
+    { "create-user", new AddUserCommand() }
 };
 
 do
@@ -21,16 +20,11 @@ do
 
     var parsedCommand = command.Split(' ');
 
-    if (parsedCommand[0].Equals("help"))
-    {
-        commands[parsedCommand[0]].Execute(commands.Select(c => c.Value.ToString()).Where(c => !c.Equals("help")).ToArray());
-    }
-
     if (commands.ContainsKey(parsedCommand[0]))
     {
         try
         {
-            commands[parsedCommand[0]].Execute(parsedCommand.Skip(1).ToArray());
+            await commands[parsedCommand[0]].Execute(parsedCommand.Skip(1).ToArray());
         }
         catch
         {
@@ -39,7 +33,7 @@ do
     }
     else
     {
-        Console.WriteLine("Invalid command, use help for more information");
+        Console.WriteLine("Invalid command");
     }
 
 } while (true);

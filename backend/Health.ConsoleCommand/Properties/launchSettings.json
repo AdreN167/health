@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Health.ConsoleCommand": {
+      "commandName": "Project"
+    }
+  }
+}

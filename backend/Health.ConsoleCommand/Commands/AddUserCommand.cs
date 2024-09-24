@@ -7,9 +7,9 @@ public class AddUserCommand : ICustomCommand
 {
     private const string APP_PATH = "http://localhost:5140";
 
-    public void Execute(params string[] param)
+    public async Task Execute(params string[] param)
     {
-        AddUser(param[0], param[1]);
+        await AddUser(param[0], param[1]);
     }
 
     public override string ToString()
@@ -19,7 +19,7 @@ public class AddUserCommand : ICustomCommand
             + $"\n   [user_password]  -  the password";
     }
 
-    private void AddUser(string userName, string password)
+    private async Task AddUser(string userName, string password)
     {
         var registerModel = new
         {
@@ -27,9 +27,17 @@ public class AddUserCommand : ICustomCommand
             Password = password,
             ConfirmPassword = password
         };
-        using (var client = new HttpClient())
+        try
         {
-            var response = client.PostAsJsonAsync(APP_PATH + "/SignUp", registerModel).Result;
+            using (var client = new HttpClient())
+            {
+                var response = await (await client.PostAsJsonAsync(APP_PATH + "/SignUp", registerModel)).Content.ReadAsStringAsync();
+                Console.WriteLine($"Пользователь-администратор был создан: {response}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }

@@ -3,6 +3,7 @@ using Health.Core.Features.Products.Commands.Delete;
 using Health.Core.Features.Products.Commands.Update;
 using Health.Core.Features.Products.Dto;
 using Health.Core.Features.Products.Queries.Get;
+using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    //[Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost("CreateProduct")]
     public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromForm] CreateProductCommand request)
     {
@@ -39,7 +40,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdateProduct")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromBody] UpdateProductCommand request)
     {
@@ -49,7 +50,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("DeleteProduct/{id}")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> DeleteProduct(long id)
     {

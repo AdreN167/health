@@ -23,7 +23,7 @@ public class TokenController : Controller
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 }

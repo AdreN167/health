@@ -46,7 +46,7 @@ public class LoginCommandHandler(ApplicationDbContext context, ITokenService tok
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, "User") // захардкодили роль
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
             var accessToken = tokenService.GenerateAccessToken(claims);
             var refreshToken = tokenService.GenerateRefreshToken();
@@ -77,6 +77,7 @@ public class LoginCommandHandler(ApplicationDbContext context, ITokenService tok
                 Data = new LoginDto()
                 {
                     AccessToken = accessToken,
+                    RefreshToken = refreshToken,
                 }
             };
         }

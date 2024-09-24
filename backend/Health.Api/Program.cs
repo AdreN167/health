@@ -1,7 +1,5 @@
 using Health.Api;
-using Health.Api.Extensions;
 using Health.Core;
-using Health.Core.Features.Chat.Hubs;
 using Health.DAL;
 using Health.Domain.Models.Settings;
 
@@ -33,8 +31,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.ApplyMigrations();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -51,7 +47,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseStaticFiles();
-
-app.MapHub<ChatHub>("/chat");
 
 app.Run();

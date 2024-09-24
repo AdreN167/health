@@ -42,7 +42,7 @@ public class ProductController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("UpdateProduct")]
-    public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromBody] UpdateProductCommand request)
+    public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromForm] UpdateProductCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful

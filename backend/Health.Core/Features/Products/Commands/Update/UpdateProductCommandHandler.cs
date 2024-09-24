@@ -2,11 +2,9 @@
 using Health.Core.Features.Products.Dto;
 using Health.Core.Resources;
 using Health.DAL;
-using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Health.Core.Features.Products.Commands.Update;
 
@@ -46,6 +44,19 @@ public class UpdateProductCommandHandler(ApplicationDbContext context, IMapper m
             product.Carbohydrates = request.Carbohydrates;
             product.Calories = request.Calories;
             product.Fats = request.Fats;
+
+            if (request.Image != null)
+            {
+                var fileName = $"product-{product.Id}.{request.Image.FileName.Split('.')[1]}";
+                var filePath = Path.Combine(@"wwwroot\uploads\products", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+
+                product.FileName = fileName;
+            }
 
             await context.SaveChangesAsync(cancellationToken);
 

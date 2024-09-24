@@ -39,7 +39,8 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
 
             if (request.Image != null)
             {
-                var fileName = $"product-{newProduct.Id + 1}.{request.Image.FileName.Split('.')[1]}";
+                var id = context.Products.Max(x => x.Id);
+                var fileName = $"product-{id + 1}.{request.Image.FileName.Split('.')[1]}";
                 var filePath = Path.Combine(@"wwwroot\uploads\products", fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -48,6 +49,10 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
                 }
 
                 newProduct.FileName = fileName;
+            }
+            else
+            {
+                newProduct.FileName = string.Empty;
             }
 
             await context.Products.AddAsync(newProduct);

@@ -50,6 +50,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<ChutHub>("/chat");
+app.UseStaticFiles();
+
+app.MapHub<ChatHub>("/chat");
 
 app.Run();

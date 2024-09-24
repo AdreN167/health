@@ -13,6 +13,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Proteins).IsRequired();
         builder.Property(x => x.Fats).IsRequired();
         builder.Property(x => x.Carbohydrates).IsRequired();
+        builder.Property(x => x.FileName).HasMaxLength(200);
     }
 }
 

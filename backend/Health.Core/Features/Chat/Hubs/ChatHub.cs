@@ -5,11 +5,11 @@ using System.Text.Json;
 
 namespace Health.Core.Features.Chat.Hubs;
 
-public class ChutHub : Hub<IChatClient>
+public class ChatHub : Hub<IChatClient>
 {
     private readonly IDistributedCache _cache;
 
-    public ChutHub(IDistributedCache cache)
+    public ChatHub(IDistributedCache cache)
     {
         _cache = cache;
     }

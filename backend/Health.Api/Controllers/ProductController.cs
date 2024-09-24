@@ -29,9 +29,9 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpPost("CreateProduct")]
-    public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromBody] CreateProductCommand request)
+    public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromForm] CreateProductCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful

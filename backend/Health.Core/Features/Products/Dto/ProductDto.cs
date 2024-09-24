@@ -8,6 +8,7 @@ public class ProductDto()
     public int Fats { get; set; }
     public int Proteins { get; set; }
     public int Carbohydrates { get; set; }
+    public string ImageUrl { get; set; }
 
     //public ICollection<Dish> Dishes { get; set; } // пока хз, надо ли возвращать в продукте блюда, в которых он используется
 }

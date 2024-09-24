@@ -11,6 +11,7 @@ public class ExtendedDishDto
     public int Fats { get; set; }
     public int Proteins { get; set; }
     public int Carbohydrates { get; set; }
+    public string ImageUrl { get; set; }
     public ICollection<ProductDto> Products { get; set;}
 }
 

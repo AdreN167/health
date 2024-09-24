@@ -62,6 +62,19 @@ public class UpdateDishCommandHandler(ApplicationDbContext context, IMapper mapp
                 dish.Products!.Add(product);
             }
 
+            if (request.Image != null)
+            {
+                var fileName = $"dish-{dish.Id}.{request.Image.FileName.Split('.')[1]}";
+                var filePath = Path.Combine(@"wwwroot\uploads\dishes", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+
+                dish.FileName = fileName;
+            }
+
             await context.SaveChangesAsync(cancellationToken);
 
             return new BaseResponse<DishDto>

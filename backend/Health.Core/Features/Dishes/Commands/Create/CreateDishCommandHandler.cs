@@ -44,6 +44,24 @@ public class CreateDishCommandHandler(ApplicationDbContext context)
                 Products = products
             };
 
+            if (request.Image != null)
+            {
+                var id = context.Products.Max(x => x.Id);
+                var fileName = $"dish-{id + 1}.{request.Image.FileName.Split('.')[1]}";
+                var filePath = Path.Combine(@"wwwroot\uploads\dishes", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+
+                newDish.FileName = fileName;
+            }
+            else
+            {
+                newDish.FileName = string.Empty;
+            }
+
             await context.Dishes.AddAsync(newDish);
             await context.SaveChangesAsync(cancellationToken);
 

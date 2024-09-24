@@ -12,33 +12,51 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
 {
     public async Task<BaseResponse<long>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Name)
-            || request.Calories <= 0
-            || request.Proteins <= 0
-            || request.Fats <= 0
-            || request.Carbohydrates <= 0)
-        {
-            return new BaseResponse<long>
-            {
-                ErrorCode = (int)ErrorCode.InvalidRequest,
-                ErrorMessage = ErrorMessages.InvalidRequest,
-            };
-        }
-
-        Product newProduct = new Product
-        {
-            Name = request.Name,
-            Proteins = request.Proteins,
-            Calories = request.Calories,
-            Carbohydrates = request.Carbohydrates,
-            Fats = request.Fats,
-            Dishes = new List<Dish>()
-        };
-
         try
         {
+            if (string.IsNullOrEmpty(request.Name)
+                || request.Calories <= 0
+                || request.Proteins <= 0
+                || request.Fats <= 0
+                || request.Carbohydrates <= 0)
+            {
+                return new BaseResponse<long>
+                {
+                    ErrorCode = (int)ErrorCode.InvalidRequest,
+                    ErrorMessage = ErrorMessages.InvalidRequest,
+                };
+            }
+
+            Product newProduct = new Product
+            {
+                Name = request.Name,
+                Proteins = request.Proteins,
+                Calories = request.Calories,
+                Carbohydrates = request.Carbohydrates,
+                Fats = request.Fats,
+                Dishes = new List<Dish>()
+            };
+
+            if (request.Image != null)
+            {
+                var fileName = $"product-{newProduct.Id + 1}.{request.Image.FileName.Split('.')[1]}";
+                var filePath = Path.Combine(@"wwwroot\uploads\products", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+
+                newProduct.FileName = fileName;
+            }
+
             await context.Products.AddAsync(newProduct);
             await context.SaveChangesAsync(cancellationToken);
+
+            return new BaseResponse<long>
+            {
+                Data = newProduct.Id
+            };
         }
         catch (Exception ex)
         {
@@ -48,11 +66,6 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
                 ErrorMessage = ErrorMessages.InternalServerError + " -> " + ex.Message
             };
         }
-
-        return new BaseResponse<long>
-        {
-            Data = newProduct.Id
-        };
     }
 }
 

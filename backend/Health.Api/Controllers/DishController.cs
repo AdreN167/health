@@ -39,9 +39,9 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost("CreateDish")]
-    public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromBody] CreateDishCommand request)
+    public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromForm] CreateDishCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
@@ -49,9 +49,9 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPut("UpdateDish")]
-    public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromBody] UpdateDishCommand request)
+    public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromForm] UpdateDishCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
@@ -59,7 +59,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("DeleteDish/{id}")]
     public async Task<ActionResult<BaseResponse<long>>> DeleteDish(long id)
     {

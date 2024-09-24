@@ -27,6 +27,12 @@ public class DeleteDishCommandHandler(ApplicationDbContext context, IMapper mapp
                 };
             }
 
+            if (!string.IsNullOrWhiteSpace(dish.FileName))
+            {
+                var folder = @"wwwroot\uploads\dishes";
+                File.Delete(Path.Combine(folder, dish.FileName));
+            }
+
             context.Remove(dish);
             await context.SaveChangesAsync(cancellationToken);
 

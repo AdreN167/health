@@ -4,7 +4,7 @@ namespace Health.ConsoleCommand.Commands;
 
 public class ExitCommand : ICustomCommand
 {
-    public void Execute(params string[] param)
+    public async Task Execute(params string[] param)
     {
         Environment.Exit(0);
     }

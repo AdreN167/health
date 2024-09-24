@@ -2,6 +2,6 @@
 
 public interface ICustomCommand
 {
-    void Execute(params string[] param);
+    Task Execute(params string[] param);
 }
 

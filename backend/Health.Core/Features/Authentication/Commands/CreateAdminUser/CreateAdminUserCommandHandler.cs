@@ -8,16 +8,16 @@ using Health.Domain.Models.Response;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Health.Core.Features.Authentication.Commands.Registration;
+namespace Health.Core.Features.Authentication.Commands.CreateAdminUser;
 
-public class RegistrationCommandHandler(ApplicationDbContext context, IPasswordService passwordService)
-    : IRequestHandler<RegistrationCommand, BaseResponse<RegistrationDto>>
+public class CreateAdminUserCommandHandler(ApplicationDbContext context, IPasswordService passwordService)
+    : IRequestHandler<CreateAdminUserCommand, BaseResponse<string>>
 {
-    public async Task<BaseResponse<RegistrationDto>> Handle(RegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse<string>> Handle(CreateAdminUserCommand request, CancellationToken cancellationToken)
     {
         if (request.Password != request.ConfirmPassword)
         {
-            return new BaseResponse<RegistrationDto>()
+            return new BaseResponse<string>()
             {
                 ErrorMessage = ErrorMessages.PasswordsAreNotEqual,
                 ErrorCode = (int)ErrorCode.PasswordsAreNotEqual
@@ -29,7 +29,7 @@ public class RegistrationCommandHandler(ApplicationDbContext context, IPasswordS
             var user = await context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
             if (user != null)
             {
-                return new BaseResponse<RegistrationDto>()
+                return new BaseResponse<string>()
                 {
                     ErrorMessage = ErrorMessages.UserAlreadyExists,
                     ErrorCode = (int)ErrorCode.UserAlreadyExists
@@ -41,20 +41,20 @@ public class RegistrationCommandHandler(ApplicationDbContext context, IPasswordS
             {
                 Email = request.Email,
                 Password = hashUserPassword,
-                Role = Role.User
+                Role = Role.Admin
             };
 
             await context.Users.AddAsync(user, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
 
-            return new BaseResponse<RegistrationDto>()
+            return new BaseResponse<string>()
             {
-                Data = new RegistrationDto() { Email = user.Email }
+                Data = user.Email
             };
         }
         catch (Exception ex)
         {
-            return new BaseResponse<RegistrationDto>()
+            return new BaseResponse<string>()
             {
                 ErrorMessage = ErrorMessages.InternalServerError,
                 ErrorCode = (int)ErrorCode.InternalServerError

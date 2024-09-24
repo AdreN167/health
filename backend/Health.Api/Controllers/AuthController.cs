@@ -1,4 +1,5 @@
-﻿using Health.Core.Features.Authentication.Commands.Login;
+﻿using Health.Core.Features.Authentication.Commands.CreateAdminUser;
+using Health.Core.Features.Authentication.Commands.Login;
 using Health.Core.Features.Authentication.Commands.Registration;
 using Health.Core.Features.Authentication.Dtos;
 using Health.Domain.Models.Response;
@@ -21,7 +22,7 @@ public class AuthController : Controller
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 
@@ -31,7 +32,17 @@ public class AuthController : Controller
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    [HttpPost]
+    [Route("CreateAdminUser")]
+    public async Task<ActionResult<BaseResponse<RegistrationDto>>> CreateAdminUser([FromBody] CreateAdminUserCommand request)
+    {
+        var result = await _mediator.Send(request);
+        return result.ISuccessful
+            ? Ok(result)
             : BadRequest(result);
     }
 }

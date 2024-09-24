@@ -25,14 +25,20 @@ public class AddUserCommand : ICustomCommand
         {
             Email = userName,
             Password = password,
-            ConfirmPassword = password
+            ConfirmPassword = password,
         };
         try
         {
             using (var client = new HttpClient())
             {
-                var response = await (await client.PostAsJsonAsync(APP_PATH + "/SignUp", registerModel)).Content.ReadAsStringAsync();
-                Console.WriteLine($"Пользователь-администратор был создан: {response}");
+                var response = await client.PostAsJsonAsync(APP_PATH + "/CreateAdminUser", registerModel);
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                var message = response.IsSuccessStatusCode
+                    ? $"Пользователь-администратор был создан: {responseBody}"
+                    : responseBody;
+
+                Console.WriteLine(message);
             }
         }
         catch (Exception ex)

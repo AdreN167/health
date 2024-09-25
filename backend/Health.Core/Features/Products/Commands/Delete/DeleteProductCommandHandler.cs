@@ -2,7 +2,6 @@
 using Health.Core.Features.Products.Dto;
 using Health.Core.Resources;
 using Health.DAL;
-using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;

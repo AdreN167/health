@@ -39,8 +39,7 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
 
             if (request.Image != null)
             {
-                var id = context.Products.Max(x => x.Id);
-                var fileName = $"product-{id + 1}.{request.Image.FileName.Split('.')[1]}";
+                var fileName = $"product-{request.Image.FileName}";
                 var filePath = Path.Combine(@"wwwroot\uploads\products", fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))

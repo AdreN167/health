@@ -39,7 +39,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost("CreateDish")]
     public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromForm] CreateDishCommand request)
     {
@@ -49,7 +49,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPut("UpdateDish")]
     public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromForm] UpdateDishCommand request)
     {
@@ -59,7 +59,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("DeleteDish/{id}")]
     public async Task<ActionResult<BaseResponse<long>>> DeleteDish(long id)
     {

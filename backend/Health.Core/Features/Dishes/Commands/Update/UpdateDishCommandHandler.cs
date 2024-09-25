@@ -64,15 +64,22 @@ public class UpdateDishCommandHandler(ApplicationDbContext context, IMapper mapp
 
             if (request.Image != null)
             {
-                var fileName = $"dish-{dish.Id}.{request.Image.FileName.Split('.')[1]}";
-                var filePath = Path.Combine(@"wwwroot\uploads\dishes", fileName);
+                var folder = @"wwwroot\uploads\dishes";
+
+                if (!string.IsNullOrWhiteSpace(dish.FileName))
+                {
+                    File.Delete(Path.Combine(folder, dish.FileName));
+                }
+
+                var newFileName = $"dish-{request.Image.FileName}";
+                var filePath = Path.Combine(folder, newFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await request.Image.CopyToAsync(stream);
                 }
 
-                dish.FileName = fileName;
+                dish.FileName = newFileName;
             }
 
             await context.SaveChangesAsync(cancellationToken);

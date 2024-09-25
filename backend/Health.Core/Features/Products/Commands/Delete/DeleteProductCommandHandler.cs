@@ -26,6 +26,12 @@ public class DeleteProductCommandHandler(ApplicationDbContext context, IMapper m
                 };
             }
 
+            if (!string.IsNullOrWhiteSpace(product.FileName))
+            {
+                var folder = @"wwwroot\uploads\products";
+                File.Delete(Path.Combine(folder, product.FileName));
+            }
+
             context.Products.Remove(product);
             await context.SaveChangesAsync(cancellationToken);
 

@@ -30,7 +30,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost("CreateProduct")]
     public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromForm] CreateProductCommand request)
     {
@@ -40,7 +40,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPut("UpdateProduct")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromForm] UpdateProductCommand request)
     {
@@ -50,7 +50,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("DeleteProduct/{id}")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> DeleteProduct(long id)
     {

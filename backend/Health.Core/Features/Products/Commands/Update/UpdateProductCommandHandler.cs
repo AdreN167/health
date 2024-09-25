@@ -47,8 +47,15 @@ public class UpdateProductCommandHandler(ApplicationDbContext context, IMapper m
 
             if (request.Image != null)
             {
-                var fileName = $"product-{product.Id}.{request.Image.FileName.Split('.')[1]}";
-                var filePath = Path.Combine(@"wwwroot\uploads\products", fileName);
+                var folder = @"wwwroot\uploads\products";
+
+                if (!string.IsNullOrWhiteSpace(product.FileName))
+                {
+                    File.Delete(Path.Combine(folder, product.FileName));
+                }
+
+                var fileName = $"product-{request.Image.FileName}";
+                var filePath = Path.Combine(folder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {

@@ -2,6 +2,7 @@
 using Health.Core.Features.Products.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
@@ -28,8 +29,7 @@ public class DeleteProductCommandHandler(ApplicationDbContext context, IMapper m
 
             if (!string.IsNullOrWhiteSpace(product.FileName))
             {
-                var folder = @"wwwroot\uploads\products";
-                File.Delete(Path.Combine(folder, product.FileName));
+                File.Delete(Path.Combine(Constants.PRODUCTS_FOLDER, product.FileName));
             }
 
             context.Products.Remove(product);

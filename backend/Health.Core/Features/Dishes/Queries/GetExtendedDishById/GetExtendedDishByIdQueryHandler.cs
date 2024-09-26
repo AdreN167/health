@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-
 using Health.Core.Features.Dishes.Dto;
 using Health.Domain.Models.Response;
 using Health.DAL;
 using Health.Core.Resources;
 using Health.Domain.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper.QueryableExtensions;
 
 namespace Health.Core.Features.Dishes.Queries.GetExtendedDishById;
 

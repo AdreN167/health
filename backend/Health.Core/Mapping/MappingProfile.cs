@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Health.Core.Features.Dishes.Dto;
+using Health.Core.Features.Exercises.Dtos;
 using Health.Core.Features.Products.Dto;
+using Health.Core.Features.Trainers.Dtos;
 using Health.Domain.Models.Entities;
 
 namespace Health.Core.Mapping;
@@ -37,6 +39,16 @@ public class MappingProfile : Profile
                     src => string.IsNullOrWhiteSpace(src.FileName) 
                                 ? "" 
                                 : $@"/uploads/products/{src.FileName}"));
+
+        CreateMap<Trainer, TrainerDto>()
+            .ForMember(
+                dest => dest.ImageUrl,
+                opt => opt.MapFrom(
+                    src => string.IsNullOrWhiteSpace(src.FileName)
+                                ? ""
+                                : $@"/uploads/trainers/{src.FileName}"));
+
+        CreateMap<Exercise, ExerciseDto>();
     }
 }
 

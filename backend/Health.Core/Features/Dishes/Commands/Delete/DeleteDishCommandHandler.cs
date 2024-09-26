@@ -2,6 +2,7 @@
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
@@ -29,8 +30,7 @@ public class DeleteDishCommandHandler(ApplicationDbContext context, IMapper mapp
 
             if (!string.IsNullOrWhiteSpace(dish.FileName))
             {
-                var folder = @"wwwroot\uploads\dishes";
-                File.Delete(Path.Combine(folder, dish.FileName));
+                File.Delete(Path.Combine(Constants.DISHES_FOLDER, dish.FileName));
             }
 
             context.Remove(dish);

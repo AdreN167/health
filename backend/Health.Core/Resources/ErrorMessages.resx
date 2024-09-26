@@ -120,6 +120,9 @@
   <data name="DishNotFound" xml:space="preserve">
     <value>Dish is not found</value>
   </data>
+  <data name="ExerciseNotFound" xml:space="preserve">
+    <value>Exercise is not found</value>
+  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Internal server error</value>
   </data>
@@ -140,6 +143,9 @@
   </data>
   <data name="ProductNotFound" xml:space="preserve">
     <value>Product is not found</value>
+  </data>
+  <data name="TrainerNotFound" xml:space="preserve">
+    <value>Trainer is not found</value>
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>User is already exists</value>

@@ -1,5 +1,6 @@
 ﻿using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
@@ -46,8 +47,8 @@ public class CreateDishCommandHandler(ApplicationDbContext context)
 
             if (request.Image != null)
             {
-                var newFileName = $"dish-{request.Image.FileName}";
-                var filePath = Path.Combine(@"wwwroot\uploads\dishes", newFileName);
+                var newFileName = $"dish-{Guid.NewGuid()}-{request.Image.FileName}";
+                var filePath = Path.Combine(Constants.DISHES_FOLDER, newFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {

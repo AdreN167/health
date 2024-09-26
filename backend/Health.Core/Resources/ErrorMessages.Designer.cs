@@ -70,6 +70,15 @@ namespace Health.Core.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Exercise is not found.
+        /// </summary>
+        internal static string ExerciseNotFound {
+            get {
+                return ResourceManager.GetString("ExerciseNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Internal server error.
         /// </summary>
         internal static string InternalServerError {
@@ -129,6 +138,15 @@ namespace Health.Core.Resources {
         internal static string ProductNotFound {
             get {
                 return ResourceManager.GetString("ProductNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Trainer is not found.
+        /// </summary>
+        internal static string TrainerNotFound {
+            get {
+                return ResourceManager.GetString("TrainerNotFound", resourceCulture);
             }
         }
         

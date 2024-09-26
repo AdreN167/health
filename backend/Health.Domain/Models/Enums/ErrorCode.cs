@@ -20,5 +20,11 @@ public enum ErrorCode
     WrongPassword = 32,
     PasswordsAreNotEqual = 33,
     UserAlreadyExists = 34,
+
+    // Trainer
+    TrainerNotFound = 41,
+
+    // Exercise
+    ExerciseNotFound = 51,
 }
 

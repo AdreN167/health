@@ -2,6 +2,7 @@
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
@@ -64,14 +65,14 @@ public class UpdateDishCommandHandler(ApplicationDbContext context, IMapper mapp
 
             if (request.Image != null)
             {
-                var folder = @"wwwroot\uploads\dishes";
+                var folder = Constants.DISHES_FOLDER;
 
                 if (!string.IsNullOrWhiteSpace(dish.FileName))
                 {
                     File.Delete(Path.Combine(folder, dish.FileName));
                 }
 
-                var newFileName = $"dish-{request.Image.FileName}";
+                var newFileName = $"dish-{Guid.NewGuid()}-{request.Image.FileName}";
                 var filePath = Path.Combine(folder, newFileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))

@@ -8,6 +8,8 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Dish> Dishes { get; set; }
+    public DbSet<Trainer> Trainers { get; set; }
+    public DbSet<Exercise> Exercises { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }
 

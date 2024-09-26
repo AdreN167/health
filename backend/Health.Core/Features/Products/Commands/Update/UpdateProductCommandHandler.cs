@@ -2,6 +2,7 @@
 using Health.Core.Features.Products.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
@@ -47,14 +48,14 @@ public class UpdateProductCommandHandler(ApplicationDbContext context, IMapper m
 
             if (request.Image != null)
             {
-                var folder = @"wwwroot\uploads\products";
+                var folder = Constants.PRODUCTS_FOLDER;
 
                 if (!string.IsNullOrWhiteSpace(product.FileName))
                 {
                     File.Delete(Path.Combine(folder, product.FileName));
                 }
 
-                var fileName = $"product-{request.Image.FileName}";
+                var fileName = $"product-{Guid.NewGuid()}-{request.Image.FileName}";
                 var filePath = Path.Combine(folder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))

@@ -1,5 +1,6 @@
 ﻿using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
@@ -39,8 +40,8 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
 
             if (request.Image != null)
             {
-                var fileName = $"product-{newProduct.Id + 1}.{request.Image.FileName.Split('.')[1]}";
-                var filePath = Path.Combine(@"wwwroot\uploads\products", fileName);
+                var fileName = $"product-{Guid.NewGuid()}-{request.Image.FileName}";
+                var filePath = Path.Combine(Constants.PRODUCTS_FOLDER, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
@@ -48,6 +49,10 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
                 }
 
                 newProduct.FileName = fileName;
+            }
+            else
+            {
+                newProduct.FileName = string.Empty;
             }
 
             await context.Products.AddAsync(newProduct);

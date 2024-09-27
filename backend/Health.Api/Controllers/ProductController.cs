@@ -30,7 +30,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "User")]
     [HttpPost("CreateProduct")]
     public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromForm] CreateProductCommand request)
     {
@@ -40,9 +40,9 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "User")]
     [HttpPut("UpdateProduct")]
-    public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromBody] UpdateProductCommand request)
+    public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromForm] UpdateProductCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
@@ -50,7 +50,7 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "User")]
     [HttpDelete("DeleteProduct/{id}")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> DeleteProduct(long id)
     {

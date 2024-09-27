@@ -2,11 +2,10 @@
 using Health.Core.Features.Products.Dto;
 using Health.Core.Resources;
 using Health.DAL;
-using Health.Domain.Models.Entities;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Health.Core.Features.Products.Commands.Delete;
 
@@ -26,6 +25,11 @@ public class DeleteProductCommandHandler(ApplicationDbContext context, IMapper m
                     ErrorCode = (int)ErrorCode.ProductNotFound,
                     ErrorMessage = ErrorMessages.ProductNotFound
                 };
+            }
+
+            if (!string.IsNullOrWhiteSpace(product.FileName))
+            {
+                File.Delete(Path.Combine(Constants.PRODUCTS_FOLDER, product.FileName));
             }
 
             context.Products.Remove(product);

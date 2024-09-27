@@ -19,7 +19,7 @@ public class GetExercisesQueryHandler(ApplicationDbContext context, IMapper mapp
         try
         {
             var exercises = await context.Exercises
-                .AsQueryable()
+                .AsNoTracking()
                 .ProjectTo<ExerciseDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

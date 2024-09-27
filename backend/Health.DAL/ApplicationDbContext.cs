@@ -12,8 +12,12 @@ public class ApplicationDbContext : DbContext
     public DbSet<Exercise> Exercises { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }
+    public DbSet<Goal> Goals { get; set; }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // отключаем легаси формат времени
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

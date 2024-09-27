@@ -19,7 +19,7 @@ public class TrainerController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("GetTrainers")]
+    [HttpGet]
     public async Task<ActionResult<CollectionResponse<TrainerDto>>> GetTrainers()
     {
         var result = await _mediator.Send(new GetTrainersQuery());
@@ -29,7 +29,7 @@ public class TrainerController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpPost("CreateTrainer")]
+    [HttpPost]
     public async Task<ActionResult<BaseResponse<long>>> CreateTrainer([FromForm] CreateTrainerCommand request)
     {
         var result = await _mediator.Send(request);
@@ -39,22 +39,22 @@ public class TrainerController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpPut("UpdateTrainer")]
+    [HttpPut]
     public async Task<ActionResult<BaseResponse<TrainerDto>>> UpdateTrainer([FromForm] UpdateTrainerCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpDelete("DeleteTrainer/{id}")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<BaseResponse<TrainerDto>>> DeleteTrainer(long id)
     {
         var result = await _mediator.Send(new DeleteTrainerCommand(id));
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 }

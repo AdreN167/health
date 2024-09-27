@@ -18,7 +18,7 @@ public class GetDishesQueryHandler(ApplicationDbContext context, IMapper mapper)
         try
         {
             var dishes = await context.Dishes
-                .AsQueryable()
+                .AsNoTracking()
                 .Include(x => x.Products)
                 .ProjectTo<DishDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);

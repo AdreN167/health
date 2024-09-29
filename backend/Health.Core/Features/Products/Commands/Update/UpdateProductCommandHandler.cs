@@ -50,6 +50,11 @@ public class UpdateProductCommandHandler(ApplicationDbContext context, IMapper m
             {
                 var folder = Constants.PRODUCTS_FOLDER;
 
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
                 if (!string.IsNullOrWhiteSpace(product.FileName))
                 {
                     File.Delete(Path.Combine(folder, product.FileName));

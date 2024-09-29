@@ -19,7 +19,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Carbohydrates, opt => opt.MapFrom(src => src.Products.Sum(p => p.Carbohydrates)));
 
         CreateMap<Product, ProductDto>()
-            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => $@"/uploads/products/{src.FileName}"));
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => !string.IsNullOrWhiteSpace(src.FileName) 
+                                                                            ? $@"/uploads/products/{src.FileName}"
+                                                                            : ""));
     }
 }
 

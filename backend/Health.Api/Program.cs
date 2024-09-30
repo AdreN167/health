@@ -19,27 +19,28 @@ builder.Services.AddSwagger();
 builder.Services.AddDAL(builder.Configuration);
 builder.Services.AddCore();
 
+
 // CORS
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
+        policy.AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
+            .AllowCredentials()
+            .SetIsOriginAllowed(_ => true);
     });
 });
 
 var app = builder.Build();
 
-app.ApplyMigrations();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();

@@ -10,7 +10,6 @@ public class User : IEntity
     public string Password { get; set; }
     public UserToken UserToken { get; set; }
     public Role Role { get; set; }
-
-    // TODO: добавить диеты и тренировки
+    public ICollection<Goal>? Goals { get; set; }
 }
 

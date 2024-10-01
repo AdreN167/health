@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Features.Exercises.Dtos;
+using Health.Core.Features.Goals.Dtos;
 using Health.Core.Features.Products.Dto;
 using Health.Core.Features.Trainers.Dtos;
 using Health.Domain.Models.Entities;
@@ -49,6 +50,10 @@ public class MappingProfile : Profile
                                 : $@"/uploads/trainers/{src.FileName}"));
 
         CreateMap<Exercise, ExerciseDto>();
+
+        CreateMap<Goal, GoalDto>();
+
+        CreateMap<Goal, ExtendedGoalDto>();
     }
 }
 

@@ -19,7 +19,7 @@ public class GetTrainersQueryHandler(ApplicationDbContext context, IMapper mappe
         try
         {
             var trainers = await context.Trainers
-                .AsQueryable()
+                .AsNoTracking()
                 .ProjectTo<TrainerDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

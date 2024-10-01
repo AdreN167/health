@@ -26,5 +26,14 @@ public enum ErrorCode
 
     // Exercise
     ExerciseNotFound = 51,
+
+    // Goal
+    GoalNotFound = 61,
+
+    // Training
+    TrainingNotFound = 71,
+
+    // Diet
+    DietNotFound = 81,
 }
 

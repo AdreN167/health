@@ -19,7 +19,7 @@ public class ExerciseController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("GetExercises")]
+    [HttpGet]
     public async Task<ActionResult<CollectionResponse<ExerciseDto>>> GetExercises()
     {
         var result = await _mediator.Send(new GetExercisesQuery());
@@ -29,7 +29,7 @@ public class ExerciseController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpPost("CreateExercise")]
+    [HttpPost]
     public async Task<ActionResult<BaseResponse<long>>> CreateExercise([FromBody] CreateExerciseCommand request)
     {
         var result = await _mediator.Send(request);
@@ -39,22 +39,22 @@ public class ExerciseController : ControllerBase
     }
 
     ////[Authorize(Roles = "Admin")]
-    [HttpPut("UpdateExercise")]
+    [HttpPut]
     public async Task<ActionResult<BaseResponse<ExerciseDto>>> UpdateExercise([FromBody] UpdateExerciseCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpDelete("DeleteExercise/{id}")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<BaseResponse<ExerciseDto>>> DeleteExercise(long id)
     {
         var result = await _mediator.Send(new DeleteExerciseCommand(id));
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 }

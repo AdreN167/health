@@ -18,7 +18,7 @@ public class GetProductsQueryHandler(ApplicationDbContext context, IMapper mappe
         try
         {
             var products = await context.Products
-                .AsQueryable()
+                .AsNoTracking()
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

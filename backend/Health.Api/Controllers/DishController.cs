@@ -21,7 +21,7 @@ public class DishController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("GetDishes")]
+    [HttpGet]
     public async Task<ActionResult<CollectionResponse<ExtendedDishDto>>> GetDishes()
     {
         var result = await _mediator.Send(new GetDishesQuery());
@@ -30,7 +30,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [HttpGet("GetExtendedDishById/{id}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<CollectionResponse<ExtendedDishDto>>> GetExtendedDishById(long id)
     {
         var result = await _mediator.Send(new GetExtendedDishByIdQuery(id));
@@ -40,7 +40,7 @@ public class DishController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpPost("CreateDish")]
+    [HttpPost]
     public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromForm] CreateDishCommand request)
     {
         var result = await _mediator.Send(request);
@@ -50,7 +50,7 @@ public class DishController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpPut("UpdateDish")]
+    [HttpPut]
     public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromForm] UpdateDishCommand request)
     {
         var result = await _mediator.Send(request);
@@ -60,7 +60,7 @@ public class DishController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpDelete("DeleteDish/{id}")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<BaseResponse<long>>> DeleteDish(long id)
     {
         var result = await _mediator.Send(new DeleteDishCommand(id));

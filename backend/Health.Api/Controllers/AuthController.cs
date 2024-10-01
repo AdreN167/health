@@ -17,7 +17,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    [Route("SignIn")]
+    [Route("signIn")]
     public async Task<ActionResult<BaseResponse<LoginDto>>> SignIn([FromBody] LoginCommand request)
     {
         var result = await _mediator.Send(request);
@@ -27,7 +27,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    [Route("SignUp")]
+    [Route("signUp")]
     public async Task<ActionResult<BaseResponse<RegistrationDto>>> SignUp([FromBody] RegistrationCommand request)
     {
         var result = await _mediator.Send(request);
@@ -37,7 +37,7 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    [Route("CreateAdminUser")]
+    [Route("createAdminUser")]
     public async Task<ActionResult<BaseResponse<RegistrationDto>>> CreateAdminUser([FromBody] CreateAdminUserCommand request)
     {
         var result = await _mediator.Send(request);

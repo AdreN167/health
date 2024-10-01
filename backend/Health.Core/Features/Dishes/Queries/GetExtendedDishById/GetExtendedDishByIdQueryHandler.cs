@@ -17,6 +17,7 @@ public class GetExtendedDishByIdQueryHandler(ApplicationDbContext context, IMapp
         try
         {
             var dish = await context.Dishes
+                .AsNoTracking()
                 .Include(d => d.Products)
                 .FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
 

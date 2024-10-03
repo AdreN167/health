@@ -16,6 +16,10 @@ public class GoalConfiguration : IEntityTypeConfiguration<Goal>
             .WithOne(x => x.Goal)
             .HasForeignKey(x => x.GoalId)
             .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(x => x.Diets)
+            .WithOne(x => x.Goal)
+            .HasForeignKey(x => x.GoalId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
 

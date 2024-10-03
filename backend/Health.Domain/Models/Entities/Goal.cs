@@ -9,6 +9,7 @@ public class Goal : IEntity
     public string? Description { get; set; }
     public DateTime Deadline { get; set; }
     public long UserId { get; set; }
-    public User User { get; set; }
+    public virtual User? User { get; set; }
+    public virtual ICollection<Workout>? Workouts { get; set; }
 }
 

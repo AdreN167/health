@@ -196,6 +196,15 @@ namespace Health.Core.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Workout is not found.
+        /// </summary>
+        internal static string WorkoutNotFound {
+            get {
+                return ResourceManager.GetString("WorkoutNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Password is wrong.
         /// </summary>
         internal static string WrongPassword {

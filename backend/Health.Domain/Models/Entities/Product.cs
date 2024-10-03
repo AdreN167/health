@@ -7,7 +7,7 @@ public class Product : Food, IEntity
 {
     public long Id { get; set; }
     public string FileName { get; set; }
-    public virtual ICollection<Dish> Dishes { get; set; }
+    public virtual ICollection<Dish>? Dishes { get; set; }
 
     public Product()
     {

@@ -35,5 +35,8 @@ public enum ErrorCode
 
     // Diet
     DietNotFound = 81,
+
+    // Workout
+    WorkoutNotFound = 91
 }
 

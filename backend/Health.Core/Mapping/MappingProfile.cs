@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Features.Exercises.Dtos;
 using Health.Core.Features.Goals.Dtos;
 using Health.Core.Features.Products.Dto;
 using Health.Core.Features.Trainers.Dtos;
+using Health.Core.Features.Workouts.Dtos;
 using Health.Domain.Models.Entities;
 
 namespace Health.Core.Mapping;
@@ -54,6 +56,37 @@ public class MappingProfile : Profile
         CreateMap<Goal, GoalDto>();
 
         CreateMap<Goal, ExtendedGoalDto>();
+
+        CreateMap<Workout, WorkoutDto>();
+
+        CreateMap<ICollection<WorkoutExercise>, ICollection<WorkoutExerciseDto>>();
+
+        CreateMap<Workout, ExtendedWorkoutDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(
+                dest => dest.Exercises,
+                opt => opt.MapFrom(
+                    src => src.WorkoutExercise
+                            .Select(we => new WorkoutExerciseDto 
+                                { 
+                                    Exercise = new ExerciseDto
+                                    {
+                                        Name = we.Exercise.Name,
+                                        Description = we.Exercise.Description,
+                                        CaloriesBurned = we.Exercise.CaloriesBurned,
+                                        Id = we.Exercise.Id,
+                                        Trainer = new TrainerDto 
+                                        { 
+                                            Id = we.Exercise.Trainer.Id, 
+                                            Name = we.Exercise.Trainer.Name,
+                                            ImageUrl = string.IsNullOrWhiteSpace(we.Exercise.Trainer.FileName)
+                                                            ? ""
+                                                            : $@"/uploads/products/{we.Exercise.Trainer.FileName}"
+                                        }
+                                    }, 
+                                    Repetitions = we.Repetitions
+                                })));
     }
 }
 

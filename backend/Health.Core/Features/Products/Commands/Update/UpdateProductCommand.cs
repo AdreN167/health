@@ -9,10 +9,10 @@ public class UpdateProductCommand : IRequest<BaseResponse<ProductDto>>
 {
     public long Id { get; set; }
     public string Name { get; set; }
-    public int Calories { get; set; }
-    public int Fats { get; set; }
-    public int Proteins { get; set; }
-    public int Carbohydrates { get; set; }
+    public double Calories { get; set; }
+    public double Fats { get; set; }
+    public double Proteins { get; set; }
+    public double Carbohydrates { get; set; }
     public IFormFile? Image { get; set; }
 }
 

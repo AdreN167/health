@@ -11,5 +11,6 @@ public class Goal : IEntity
     public long UserId { get; set; }
     public virtual User? User { get; set; }
     public virtual ICollection<Workout>? Workouts { get; set; }
+    public virtual ICollection<Diet>? Diets { get; set; }
 }
 

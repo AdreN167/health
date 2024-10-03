@@ -27,7 +27,7 @@ public class GetExtendedGoalByIdQueryHandler(ApplicationDbContext context, IMapp
             }
 
             context.Entry(goal).Collection(goal => goal.Workouts).Load();
-            //context.Entry(goal).Collection(goal => goal.Diets).Load();
+            context.Entry(goal).Collection(goal => goal.Diets).Load();
 
             return new BaseResponse<ExtendedGoalDto>
             {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Health.Core.Features.Diets.Dtos;
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Features.Exercises.Dtos;
 using Health.Core.Features.Goals.Dtos;
@@ -87,6 +88,10 @@ public class MappingProfile : Profile
                                     }, 
                                     Repetitions = we.Repetitions
                                 })));
+
+        CreateMap<Diet, DietDto>();
+
+        CreateMap<Diet, ExtendedDietDto>();
     }
 }
 

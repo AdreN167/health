@@ -13,15 +13,43 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserToken> UserTokens { get; set; }
     public DbSet<Goal> Goals { get; set; }
+    public DbSet<Workout> Workouts { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); // отключаем легаси формат времени
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+        base.OnConfiguring(optionsBuilder);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder
+            .Entity<Workout>()
+            .HasMany(w => w.Exercises)
+            .WithMany(e => e.Workouts)
+            .UsingEntity<WorkoutExercise>(
+                we => we
+                    .HasOne(x => x.Exercise)
+                    .WithMany(y => y.WorkoutExercise)
+                    .HasForeignKey(x => x.ExerciseId),
+                we => we
+                    .HasOne(x => x.Workout)
+                    .WithMany(y => y.WorkoutExercise)
+                    .HasForeignKey(x => x.WorkoutId),
+                we =>
+                {
+                    we.Property(x => x.Repetitions).IsRequired();
+                    we.HasKey(x => new { x.WorkoutId, x.ExerciseId });
+                    we.ToTable("WorkoutExercise");
+                });
+
         base.OnModelCreating(modelBuilder);
     }
 }

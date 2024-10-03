@@ -162,6 +162,9 @@
   <data name="UserNotFound" xml:space="preserve">
     <value>User is not found</value>
   </data>
+  <data name="WorkoutNotFound" xml:space="preserve">
+    <value>Workout is not found</value>
+  </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>Password is wrong</value>
   </data>

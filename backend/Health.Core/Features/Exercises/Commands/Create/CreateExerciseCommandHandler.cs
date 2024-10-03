@@ -30,6 +30,7 @@ public class CreateExerciseCommandHandler(ApplicationDbContext context)
             {
                 Name = request.Name,
                 Description = request.Description,
+                CaloriesBurned = request.CaloriesBurned,
             };
 
             if (request.TrainerId != null && request.TrainerId > 0)

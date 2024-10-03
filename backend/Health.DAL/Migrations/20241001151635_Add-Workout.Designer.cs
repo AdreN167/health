@@ -3,6 +3,7 @@ using System;
 using Health.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Health.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241001151635_Add-Workout")]
+    partial class AddWorkout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,24 +261,6 @@ namespace Health.DAL.Migrations
                     b.ToTable("Workouts");
                 });
 
-            modelBuilder.Entity("Health.Domain.Models.Entities.WorkoutExercise", b =>
-                {
-                    b.Property<long>("WorkoutId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ExerciseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Repetitions")
-                        .HasColumnType("integer");
-
-                    b.HasKey("WorkoutId", "ExerciseId");
-
-                    b.HasIndex("ExerciseId");
-
-                    b.ToTable("WorkoutExercise", (string)null);
-                });
-
             modelBuilder.Entity("DishProduct", b =>
                 {
                     b.HasOne("Health.Domain.Models.Entities.Dish", null)
@@ -334,30 +319,6 @@ namespace Health.DAL.Migrations
                     b.Navigation("Goal");
                 });
 
-            modelBuilder.Entity("Health.Domain.Models.Entities.WorkoutExercise", b =>
-                {
-                    b.HasOne("Health.Domain.Models.Entities.Exercise", "Exercise")
-                        .WithMany("WorkoutExercise")
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Health.Domain.Models.Entities.Workout", "Workout")
-                        .WithMany("WorkoutExercise")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exercise");
-
-                    b.Navigation("Workout");
-                });
-
-            modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
-                {
-                    b.Navigation("WorkoutExercise");
-                });
-
             modelBuilder.Entity("Health.Domain.Models.Entities.Goal", b =>
                 {
                     b.Navigation("Workouts");
@@ -374,11 +335,6 @@ namespace Health.DAL.Migrations
 
                     b.Navigation("UserToken")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Health.Domain.Models.Entities.Workout", b =>
-                {
-                    b.Navigation("WorkoutExercise");
                 });
 #pragma warning restore 612, 618
         }

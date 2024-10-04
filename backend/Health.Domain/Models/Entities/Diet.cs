@@ -10,5 +10,6 @@ public class Diet : IEntity
     public virtual Goal? Goal { get; set; }
     public virtual ICollection<Dish>? Dishes { get; set; }
     public virtual ICollection<Product>? Products { get; set; }
+    public virtual ICollection<DietEvent>? EventJournal { get; set; }
 }
 

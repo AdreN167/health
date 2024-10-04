@@ -10,5 +10,6 @@ public class Workout : IEntity
     public virtual Goal? Goal { get; set; }
     public virtual ICollection<Exercise>? Exercises { get; set; }
     public virtual ICollection<WorkoutExercise>? WorkoutExercise { get; set; }
+    public virtual ICollection<WorkoutEvent>? EventJournal { get; set; }
 }
 

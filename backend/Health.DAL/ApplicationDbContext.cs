@@ -16,6 +16,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Workout> Workouts { get; set; }
     public DbSet<Diet> Diets { get; set; }
     public DbSet<WorkoutEvent> WorkoutEvents{ get; set; }
+    public DbSet<DietEvent> DietEvents{ get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
     {

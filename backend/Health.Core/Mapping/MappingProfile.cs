@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Health.Core.Features.DietEventJournal.Dtos;
 using Health.Core.Features.Diets.Dtos;
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Features.Exercises.Dtos;
@@ -77,15 +78,15 @@ public class MappingProfile : Profile
                                         CaloriesBurned = we.Exercise.CaloriesBurned,
                                         Id = we.Exercise.Id,
                                         Trainer = we.Exercise.Trainer != null 
-                                        ? new TrainerDto 
-                                            {
-                                                Id = we.Exercise.Trainer.Id, 
-                                                Name = we.Exercise.Trainer.Name,
-                                                ImageUrl = string.IsNullOrWhiteSpace(we.Exercise.Trainer.FileName)
-                                                                ? ""
-                                                                : $@"/uploads/products/{we.Exercise.Trainer.FileName}"
-                                            }
-                                        : null
+                                            ? new TrainerDto 
+                                                {
+                                                    Id = we.Exercise.Trainer.Id, 
+                                                    Name = we.Exercise.Trainer.Name,
+                                                    ImageUrl = string.IsNullOrWhiteSpace(we.Exercise.Trainer.FileName)
+                                                                    ? ""
+                                                                    : $@"/uploads/products/{we.Exercise.Trainer.FileName}"
+                                                }
+                                            : null
                                     }, 
                                     Repetitions = we.Repetitions
                                 }) ?? null));
@@ -95,6 +96,8 @@ public class MappingProfile : Profile
         CreateMap<Diet, ExtendedDietDto>();
 
         CreateMap<WorkoutEvent, WorkoutEventDto>();
+
+        CreateMap<DietEvent, DietEventDto>();
     }
 }
 

@@ -12,6 +12,6 @@ public class ExtendedDishDto
     public double Proteins { get; set; }
     public double Carbohydrates { get; set; }
     public string ImageUrl { get; set; }
-    public ICollection<ProductDto> Products { get; set;}
+    public ICollection<CutedProductDto> Products { get; set;}
 }
 

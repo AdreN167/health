@@ -7,7 +7,9 @@ using Health.Domain.Models.Response;
 using Health.Core.Features.Dishes.Commands.Update;
 using Health.Core.Features.Dishes.Commands.Delete;
 using Health.Core.Features.Dishes.Queries.GetExtendedDishById;
+using Health.Core.Features.Dishes.Commands.UpdateListOfProductsByDishId;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Specialized;
 
 namespace Health.Api.Controllers;
 [Route("api/[controller]")]
@@ -42,6 +44,15 @@ public class DishController : ControllerBase
     //[Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromForm] CreateDishCommand request)
+    {
+        var result = await _mediator.Send(request);
+        return result.ISuccessful
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    [HttpPut("/update/listOfProducts")]
+    public async Task<ActionResult<BaseResponse<long>>> UpdateListOfProductsByDishId([FromBody] UpdateListOfProductsByDishIdCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful

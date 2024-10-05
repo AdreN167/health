@@ -10,5 +10,6 @@ public class Dish : IEntity
     public string FileName { get; set; }
     public virtual ICollection<Product>? Products { get; set; }
     public virtual ICollection<Diet>? Diets { get; set; }
+    public virtual ICollection<DishProduct>? DishProducts { get; set; }
 }
 

@@ -53,6 +53,26 @@ public class ApplicationDbContext : DbContext
                     we.ToTable("WorkoutExercise");
                 });
 
+        modelBuilder
+            .Entity<Product>()
+            .HasMany(p => p.Dishes)
+            .WithMany(d => d.Products)
+            .UsingEntity<DishProduct>(
+                dp => dp
+                    .HasOne(x => x.Dish)
+                    .WithMany(y => y.DishProducts)
+                    .HasForeignKey(x => x.DishId),
+                dp => dp
+                    .HasOne(x => x.Product)
+                    .WithMany(y => y.DishProducts)
+                    .HasForeignKey(x => x.ProductId),
+                dp =>
+                {
+                    dp.Property(x => x.Weight).IsRequired();
+                    dp.HasKey(x => new { x.DishId, x.ProductId });
+                    dp.ToTable("DishProduct");
+                });
+
         base.OnModelCreating(modelBuilder);
     }
 }

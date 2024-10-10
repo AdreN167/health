@@ -30,20 +30,16 @@ public class MappingProfile : Profile
         CreateMap<Dish, ExtendedDishDto>()
             .ForMember(dest => dest.Fats, 
                 opt => opt.MapFrom(src => src.DishProducts.Sum(
-                    dp => dp.Product.Fats * dp.Weight / src.DishProducts.Sum(dp => dp.Weight) / Constants.COMMON_WEIGHT 
-                          * src.DishProducts.Sum(dp => dp.Weight))))
+                    dp => dp.Product.Fats * dp.Weight / Constants.COMMON_WEIGHT)))
             .ForMember(dest => dest.Proteins, 
                 opt => opt.MapFrom(src => src.DishProducts.Sum(
-                    dp => dp.Product.Proteins * dp.Weight / src.DishProducts.Sum(dp => dp.Weight) / Constants.COMMON_WEIGHT
-                          * src.DishProducts.Sum(dp => dp.Weight))))
+                    dp => dp.Product.Proteins * dp.Weight / Constants.COMMON_WEIGHT)))
             .ForMember(dest => dest.Calories, 
                 opt => opt.MapFrom(src => src.DishProducts.Sum(
-                    dp => dp.Product.Calories * dp.Weight / src.DishProducts.Sum(dp => dp.Weight) / Constants.COMMON_WEIGHT
-                          * src.DishProducts.Sum(dp => dp.Weight))))
+                    dp => dp.Product.Calories * dp.Weight / Constants.COMMON_WEIGHT)))
             .ForMember(dest => dest.Carbohydrates, 
                 opt => opt.MapFrom(src => src.DishProducts.Sum(
-                    dp => dp.Product.Carbohydrates * dp.Weight / src.DishProducts.Sum(dp => dp.Weight) / Constants.COMMON_WEIGHT
-                          * src.DishProducts.Sum(dp => dp.Weight))))
+                    dp => dp.Product.Carbohydrates * dp.Weight / Constants.COMMON_WEIGHT)))
             .ForMember(
                 dest => dest.ImageUrl,
                 opt => opt.MapFrom(
@@ -51,13 +47,14 @@ public class MappingProfile : Profile
                                 ? ""
                                 : $@"/uploads/dishes/{src.FileName}"))
             .ForMember(dest => dest.Products,
-                opt => opt.MapFrom(src => src.Products.Select(p => new CutedProductDto
+                opt => opt.MapFrom(src => src.DishProducts.Select(p => new CutedProductDto
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    ImageUrl = string.IsNullOrWhiteSpace(p.FileName)
+                    Id = p.Product.Id,
+                    Name = p.Product.Name,
+                    Weight = p.Weight,
+                    ImageUrl = string.IsNullOrWhiteSpace(p.Product.FileName)
                                 ? ""
-                                : $@"/uploads/dishes/{p.FileName}"
+                                : $@"/uploads/dishes/{p.Product.FileName}"
 
                 }).ToList()));
 

@@ -22,6 +22,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+    //[Authorize(Roles = "Admin")]
     public async Task<ActionResult<CollectionResponse<ProductDto>>> GetProducts()
     {
         var result = await _mediator.Send(new GetProductsQuery());

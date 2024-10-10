@@ -87,21 +87,26 @@ namespace Health.DAL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<double>("Calories")
+                        .IsRequired()
                         .HasColumnType("double precision");
 
                     b.Property<double>("Carbohydrates")
+                        .IsRequired()
                         .HasColumnType("double precision");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("DietId")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<double>("Fats")
+                        .IsRequired()
                         .HasColumnType("double precision");
 
                     b.Property<double>("Proteins")
+                        .IsRequired()
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");

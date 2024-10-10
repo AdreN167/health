@@ -9,6 +9,7 @@ using Health.Core.Features.Products.Dto;
 using Health.Core.Features.Trainers.Dtos;
 using Health.Core.Features.WorkoutEventJournal.Dtos;
 using Health.Core.Features.Workouts.Dtos;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Entities;
 
 namespace Health.Core.Mapping;
@@ -18,7 +19,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Dish, DishDto>()
-            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products.Select(p => p.Name)))
+            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products!.Select(p => p.Name)))
             .ForMember(
                 dest => dest.ImageUrl,
                 opt => opt.MapFrom(
@@ -27,16 +28,35 @@ public class MappingProfile : Profile
                                 : $@"/uploads/dishes/{src.FileName}"));
 
         CreateMap<Dish, ExtendedDishDto>()
-            .ForMember(dest => dest.Fats, opt => opt.MapFrom(src => src.Products.Sum(p => p.Fats)))
-            .ForMember(dest => dest.Calories, opt => opt.MapFrom(src => src.Products.Sum(p => p.Calories)))
-            .ForMember(dest => dest.Proteins, opt => opt.MapFrom(src => src.Products.Sum(p => p.Proteins)))
-            .ForMember(dest => dest.Carbohydrates, opt => opt.MapFrom(src => src.Products.Sum(p => p.Carbohydrates)))
+            .ForMember(dest => dest.Fats, 
+                opt => opt.MapFrom(src => src.DishProducts.Sum(
+                    dp => dp.Product.Fats * dp.Weight / Constants.COMMON_WEIGHT)))
+            .ForMember(dest => dest.Proteins, 
+                opt => opt.MapFrom(src => src.DishProducts.Sum(
+                    dp => dp.Product.Proteins * dp.Weight / Constants.COMMON_WEIGHT)))
+            .ForMember(dest => dest.Calories, 
+                opt => opt.MapFrom(src => src.DishProducts.Sum(
+                    dp => dp.Product.Calories * dp.Weight / Constants.COMMON_WEIGHT)))
+            .ForMember(dest => dest.Carbohydrates, 
+                opt => opt.MapFrom(src => src.DishProducts.Sum(
+                    dp => dp.Product.Carbohydrates * dp.Weight / Constants.COMMON_WEIGHT)))
             .ForMember(
                 dest => dest.ImageUrl,
                 opt => opt.MapFrom(
                     src => string.IsNullOrWhiteSpace(src.FileName)
                                 ? ""
-                                : $@"/uploads/dishes/{src.FileName}"));
+                                : $@"/uploads/dishes/{src.FileName}"))
+            .ForMember(dest => dest.Products,
+                opt => opt.MapFrom(src => src.DishProducts.Select(p => new CutedProductDto
+                {
+                    Id = p.Product.Id,
+                    Name = p.Product.Name,
+                    Weight = p.Weight,
+                    ImageUrl = string.IsNullOrWhiteSpace(p.Product.FileName)
+                                ? ""
+                                : $@"/uploads/dishes/{p.Product.FileName}"
+
+                }).ToList()));
 
         CreateMap<Product, ProductDto>()
             .ForMember(

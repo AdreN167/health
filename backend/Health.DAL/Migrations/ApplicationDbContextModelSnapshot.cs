@@ -55,21 +55,6 @@ namespace Health.DAL.Migrations
                     b.ToTable("DietProduct");
                 });
 
-            modelBuilder.Entity("DishProduct", b =>
-                {
-                    b.Property<long>("DishesId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProductsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DishesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("DishProduct");
-                });
-
             modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
                 {
                     b.Property<long>("Id")
@@ -152,6 +137,24 @@ namespace Health.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Dishes");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DishProduct", b =>
+                {
+                    b.Property<long>("DishId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("DishId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("DishProduct", (string)null);
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
@@ -419,21 +422,6 @@ namespace Health.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DishProduct", b =>
-                {
-                    b.HasOne("Health.Domain.Models.Entities.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Health.Domain.Models.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
                 {
                     b.HasOne("Health.Domain.Models.Entities.Goal", "Goal")
@@ -454,6 +442,25 @@ namespace Health.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Diet");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DishProduct", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Dish", "Dish")
+                        .WithMany("DishProducts")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Product", "Product")
+                        .WithMany("DishProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
@@ -534,6 +541,11 @@ namespace Health.DAL.Migrations
                     b.Navigation("EventJournal");
                 });
 
+            modelBuilder.Entity("Health.Domain.Models.Entities.Dish", b =>
+                {
+                    b.Navigation("DishProducts");
+                });
+
             modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
                 {
                     b.Navigation("WorkoutExercise");
@@ -544,6 +556,11 @@ namespace Health.DAL.Migrations
                     b.Navigation("Diets");
 
                     b.Navigation("Workouts");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Product", b =>
+                {
+                    b.Navigation("DishProducts");
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Trainer", b =>

@@ -6,7 +6,7 @@ import { UploadFile } from "@mui/icons-material";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import { getProducts } from "../../api/productService";
 import AuthContext from "../../store/AuthContext";
-import FullFeaturedCrudGrid from "../../components/Test/Test";
+import DataGrid from "../../components/DataGrid/DataGrid";
 
 const errMsg = "Ошибка ввода";
 
@@ -101,7 +101,7 @@ const ProductPage = () => {
           </UploadButton>
         </Stack>
       </form>
-      <FullFeaturedCrudGrid />
+      <DataGrid />
     </AdminLayout>
   );
 };

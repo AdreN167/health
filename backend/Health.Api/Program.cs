@@ -6,7 +6,7 @@ using Health.Domain.Models.Settings;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Вытаскиваем данные про jwt из appsettings.json
+// Г‚Г»ГІГ Г±ГЄГЁГўГ ГҐГ¬ Г¤Г Г­Г­Г»ГҐ ГЇГ°Г® jwt ГЁГ§ appsettings.json
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.DefaultSection));
 
 // Add services to the container.
@@ -17,17 +17,10 @@ builder.Services.AddSwagger();
 builder.Services.AddDAL(builder.Configuration);
 builder.Services.AddCore();
 
+
 // CORS
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
+builder.Services.AddCors(options => options.AddDefaultPolicy(
+    policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 var app = builder.Build();
 
@@ -36,6 +29,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();

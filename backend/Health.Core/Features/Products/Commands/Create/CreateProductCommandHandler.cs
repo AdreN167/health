@@ -42,6 +42,11 @@ public class CreateProductCommandHandler(ApplicationDbContext context)
             {
                 var fileName = $"product-{Guid.NewGuid()}-{request.Image.FileName}";
                 var filePath = Path.Combine(Constants.PRODUCTS_FOLDER, fileName);
+                
+                if (!Directory.Exists(Constants.PRODUCTS_FOLDER)) 
+                { 
+                    Directory.CreateDirectory(Constants.PRODUCTS_FOLDER);
+                }
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {

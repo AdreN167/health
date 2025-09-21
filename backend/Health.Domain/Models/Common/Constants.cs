@@ -6,6 +6,5 @@ public static class Constants
     public const string PRODUCTS_FOLDER = UPLOADS_FOLDER + "/products";
     public const string DISHES_FOLDER = UPLOADS_FOLDER + "/dishes";
     public const string TRAINERS_FOLDER = UPLOADS_FOLDER + "/trainers";
-
     public const double COMMON_WEIGHT = 100;
 }

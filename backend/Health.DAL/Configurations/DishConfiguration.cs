@@ -11,6 +11,7 @@ public class DishConfiguration : IEntityTypeConfiguration<Dish>
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
         builder.Property(x => x.Description).HasMaxLength(1000);
+        builder.Property(x => x.FileName).HasMaxLength(200);
     }
 }
 

@@ -7,10 +7,10 @@ namespace Health.Core.Features.Products.Commands.Create;
 public class CreateProductCommand : IRequest<BaseResponse<long>> // вернет Id созданной сущности
 {
     public string Name { get; set; }
-    public int Calories { get; set; }
-    public int Fats { get; set; }
-    public int Proteins { get; set; }
-    public int Carbohydrates { get; set; }
+    public double Calories { get; set; }
+    public double Fats { get; set; }
+    public double Proteins { get; set; }
+    public double Carbohydrates { get; set; }
     public IFormFile? Image { get; set; }
 }
 

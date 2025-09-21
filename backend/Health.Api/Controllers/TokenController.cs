@@ -18,7 +18,7 @@ public class TokenController : Controller
     }
 
     [HttpPost]
-    [Route("RefreshToken")]
+    [Route("refreshToken")]
     public async Task<ActionResult<BaseResponse<TokenDto>>> RefreshToken([FromBody] RefreshTokenCommand request)
     {
         var result = await _mediator.Send(request);

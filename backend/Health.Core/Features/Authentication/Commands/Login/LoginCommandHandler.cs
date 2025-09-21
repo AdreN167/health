@@ -78,6 +78,7 @@ public class LoginCommandHandler(ApplicationDbContext context, ITokenService tok
                 {
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,
+                    Role = user.Role.ToString(),
                     Email = request.Email
                 }
             };

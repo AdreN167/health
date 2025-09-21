@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Health.Core.Features.Dishes.Queries.Get;
 
-public record GetDishesQuery : IRequest<CollectionResponse<DishDto>>;
+public record GetDishesQuery : IRequest<CollectionResponse<ExtendedDishDto>>;
 

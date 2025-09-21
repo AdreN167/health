@@ -21,7 +21,8 @@ public class ProductController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("GetProducts")]
+    [HttpGet]
+    //[Authorize(Roles = "Admin")]
     public async Task<ActionResult<CollectionResponse<ProductDto>>> GetProducts()
     {
         var result = await _mediator.Send(new GetProductsQuery());
@@ -30,8 +31,8 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize]
-    [HttpPost("CreateProduct")]
+    //[Authorize(Roles = "Admin")]
+    [HttpPost]
     public async Task<ActionResult<BaseResponse<long>>> CreateProduct([FromForm] CreateProductCommand request)
     {
         var result = await _mediator.Send(request);
@@ -40,23 +41,23 @@ public class ProductController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize]
-    [HttpPut("UpdateProduct")]
+    //[Authorize(Roles = "Admin")]
+    [HttpPut]
     public async Task<ActionResult<BaseResponse<ProductDto>>> UpdateProduct([FromForm] UpdateProductCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 
-    [Authorize]
-    [HttpDelete("DeleteProduct/{id}")]
+    //[Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<BaseResponse<ProductDto>>> DeleteProduct(long id)
     {
         var result = await _mediator.Send(new DeleteProductCommand(id));
         return result.ISuccessful
-            ? Ok(result.Data)
+            ? Ok(result)
             : BadRequest(result);
     }
 }

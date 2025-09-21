@@ -2,6 +2,8 @@
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
+using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
@@ -27,9 +29,7 @@ public class UpdateDishCommandHandler(ApplicationDbContext context, IMapper mapp
                 };
             }
 
-            if (string.IsNullOrWhiteSpace(request.Description) 
-                || string.IsNullOrWhiteSpace(request.Name)
-                || request.ProductIds.Count == 0)
+            if (string.IsNullOrWhiteSpace(request.Description) || string.IsNullOrWhiteSpace(request.Name))
             {
                 return new BaseResponse<DishDto>
                 {
@@ -38,28 +38,27 @@ public class UpdateDishCommandHandler(ApplicationDbContext context, IMapper mapp
                 };
             }
 
-            await context.Entry(dish).Collection(e => e.Products).LoadAsync(cancellationToken); // подгружаем продукты в блюдо
-
-            var productsToAdd = await context.Products
-                .Where(x => request.ProductIds.Contains(x.Id))
-                .ToListAsync(cancellationToken);
-
-            if (request.ProductIds.Count != productsToAdd.Count)
-            {
-                return new BaseResponse<DishDto>
-                {
-                    ErrorCode = (int)ErrorCode.ProductNotFound,
-                    ErrorMessage = ErrorMessages.ProductNotFound
-                };
-            }
-
             dish.Name = request.Name;
             dish.Description = request.Description;
-            dish.Products.Clear();
 
-            foreach (var product in productsToAdd)
+            if (request.Image != null)
             {
-                dish.Products!.Add(product);
+                var folder = Constants.DISHES_FOLDER;
+
+                if (!string.IsNullOrWhiteSpace(dish.FileName))
+                {
+                    File.Delete(Path.Combine(folder, dish.FileName));
+                }
+
+                var newFileName = $"dish-{Guid.NewGuid()}-{request.Image.FileName}";
+                var filePath = Path.Combine(folder, newFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.Image.CopyToAsync(stream);
+                }
+
+                dish.FileName = newFileName;
             }
 
             await context.SaveChangesAsync(cancellationToken);

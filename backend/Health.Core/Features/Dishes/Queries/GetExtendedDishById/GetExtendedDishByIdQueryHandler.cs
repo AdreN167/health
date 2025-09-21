@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-
 using Health.Core.Features.Dishes.Dto;
 using Health.Domain.Models.Response;
 using Health.DAL;
 using Health.Core.Resources;
 using Health.Domain.Models.Enums;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper.QueryableExtensions;
 
 namespace Health.Core.Features.Dishes.Queries.GetExtendedDishById;
 
@@ -18,9 +16,7 @@ public class GetExtendedDishByIdQueryHandler(ApplicationDbContext context, IMapp
     {
         try
         {
-            var dish = await context.Dishes
-                .Include(d => d.Products)
-                .FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
+            var dish = await context.Dishes.FindAsync([request.Id], cancellationToken);
 
             if (dish == null)
             {

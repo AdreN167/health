@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DietNotFound" xml:space="preserve">
+    <value>Diet is not found</value>
+  </data>
   <data name="DishNotFound" xml:space="preserve">
     <value>Dish is not found</value>
+  </data>
+  <data name="ExerciseNotFound" xml:space="preserve">
+    <value>Exercise is not found</value>
+  </data>
+  <data name="GoalNotFound" xml:space="preserve">
+    <value>Goal is not found</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Internal server error</value>
@@ -141,11 +150,20 @@
   <data name="ProductNotFound" xml:space="preserve">
     <value>Product is not found</value>
   </data>
+  <data name="TrainerNotFound" xml:space="preserve">
+    <value>Trainer is not found</value>
+  </data>
+  <data name="TrainingNotFound" xml:space="preserve">
+    <value>Training is not found</value>
+  </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>User is already exists</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>User is not found</value>
+  </data>
+  <data name="WorkoutNotFound" xml:space="preserve">
+    <value>Workout is not found</value>
   </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>Password is wrong</value>

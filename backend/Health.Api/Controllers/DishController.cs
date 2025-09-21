@@ -7,7 +7,9 @@ using Health.Domain.Models.Response;
 using Health.Core.Features.Dishes.Commands.Update;
 using Health.Core.Features.Dishes.Commands.Delete;
 using Health.Core.Features.Dishes.Queries.GetExtendedDishById;
+using Health.Core.Features.Dishes.Commands.UpdateListOfProductsByDishId;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Specialized;
 
 namespace Health.Api.Controllers;
 [Route("api/[controller]")]
@@ -21,7 +23,7 @@ public class DishController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("GetDishes")]
+    [HttpGet]
     public async Task<ActionResult<CollectionResponse<ExtendedDishDto>>> GetDishes()
     {
         var result = await _mediator.Send(new GetDishesQuery());
@@ -30,7 +32,7 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [HttpGet("GetExtendedDishById/{id}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<CollectionResponse<ExtendedDishDto>>> GetExtendedDishById(long id)
     {
         var result = await _mediator.Send(new GetExtendedDishByIdQuery(id));
@@ -39,9 +41,9 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpPost("CreateDish")]
-    public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromBody] CreateDishCommand request)
+    //[Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<ActionResult<BaseResponse<long>>> CreateDish([FromForm] CreateDishCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
@@ -49,9 +51,8 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpPut("UpdateDish")]
-    public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromBody] UpdateDishCommand request)
+    [HttpPut("/update/listOfProducts")]
+    public async Task<ActionResult<BaseResponse<long>>> UpdateListOfProductsByDishId([FromBody] UpdateListOfProductsByDishIdCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ISuccessful
@@ -59,8 +60,18 @@ public class DishController : ControllerBase
             : BadRequest(result);
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("DeleteDish/{id}")]
+    //[Authorize(Roles = "Admin")]
+    [HttpPut]
+    public async Task<ActionResult<BaseResponse<long>>> UpdateDish([FromForm] UpdateDishCommand request)
+    {
+        var result = await _mediator.Send(request);
+        return result.ISuccessful
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    //[Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult<BaseResponse<long>>> DeleteDish(long id)
     {
         var result = await _mediator.Send(new DeleteDishCommand(id));

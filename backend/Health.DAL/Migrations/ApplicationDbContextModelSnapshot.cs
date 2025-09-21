@@ -18,23 +18,103 @@ namespace Health.DAL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DishProduct", b =>
+            modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
                 {
-                    b.Property<long>("DishesId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ProductsId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("GoalId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("DishesId", "ProductsId");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
-                    b.HasIndex("ProductsId");
+                    b.HasKey("Id");
 
-                    b.ToTable("DishProduct");
+                    b.HasIndex("GoalId");
+
+                    b.ToTable("Diets");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietDish", b =>
+                {
+                    b.Property<long>("DietId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DishId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("DietId", "DishId");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("DietDish", (string)null);
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietEvent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("Calories")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Carbohydrates")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("DietId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Fats")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Proteins")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DietId");
+
+                    b.ToTable("DietEvents");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietProduct", b =>
+                {
+                    b.Property<long>("DietId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("DietId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("DietProduct", (string)null);
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Dish", b =>
@@ -50,6 +130,11 @@ namespace Health.DAL.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -60,6 +145,85 @@ namespace Health.DAL.Migrations
                     b.ToTable("Dishes");
                 });
 
+            modelBuilder.Entity("Health.Domain.Models.Entities.DishProduct", b =>
+                {
+                    b.Property<long>("DishId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("DishId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("DishProduct", (string)null);
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("CaloriesBurned")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<long?>("TrainerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainerId");
+
+                    b.ToTable("Exercises");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Goal", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Goals");
+                });
+
             modelBuilder.Entity("Health.Domain.Models.Entities.Product", b =>
                 {
                     b.Property<long>("Id")
@@ -68,14 +232,14 @@ namespace Health.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("Calories")
-                        .HasColumnType("integer");
+                    b.Property<double>("Calories")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("Carbohydrates")
-                        .HasColumnType("integer");
+                    b.Property<double>("Carbohydrates")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("Fats")
-                        .HasColumnType("integer");
+                    b.Property<double>("Fats")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("FileName")
                         .IsRequired()
@@ -87,12 +251,35 @@ namespace Health.DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int>("Proteins")
-                        .HasColumnType("integer");
+                    b.Property<double>("Proteins")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Trainer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Trainers");
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.User", b =>
@@ -103,16 +290,25 @@ namespace Health.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<int>("Age")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Weight")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -133,7 +329,7 @@ namespace Health.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("RefreshTokenExpiryTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -146,19 +342,169 @@ namespace Health.DAL.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("DishProduct", b =>
+            modelBuilder.Entity("Health.Domain.Models.Entities.Workout", b =>
                 {
-                    b.HasOne("Health.Domain.Models.Entities.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishesId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("GoalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoalId");
+
+                    b.ToTable("Workouts");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.WorkoutEvent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("BurnedCalories")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("WorkoutId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutEvents");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.WorkoutExercise", b =>
+                {
+                    b.Property<long>("WorkoutId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ExerciseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Repetitions")
+                        .HasColumnType("integer");
+
+                    b.HasKey("WorkoutId", "ExerciseId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("WorkoutExercise", (string)null);
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Goal", "Goal")
+                        .WithMany("Diets")
+                        .HasForeignKey("GoalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Health.Domain.Models.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
+                    b.Navigation("Goal");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietDish", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Diet", "Diet")
+                        .WithMany("DietDishes")
+                        .HasForeignKey("DietId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Dish", "Dish")
+                        .WithMany("DietDishes")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diet");
+
+                    b.Navigation("Dish");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietEvent", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Diet", "Diet")
+                        .WithMany("EventJournal")
+                        .HasForeignKey("DietId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diet");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietProduct", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Diet", "Diet")
+                        .WithMany("DietProducts")
+                        .HasForeignKey("DietId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Product", "Product")
+                        .WithMany("DietProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diet");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DishProduct", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Dish", "Dish")
+                        .WithMany("DishProducts")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Product", "Product")
+                        .WithMany("DishProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Trainer", "Trainer")
+                        .WithMany("Exercises")
+                        .HasForeignKey("TrainerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Trainer");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Goal", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.User", "User")
+                        .WithMany("Goals")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.UserToken", b =>
@@ -172,10 +518,99 @@ namespace Health.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Health.Domain.Models.Entities.Workout", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Goal", "Goal")
+                        .WithMany("Workouts")
+                        .HasForeignKey("GoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Goal");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.WorkoutEvent", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Workout", "Workout")
+                        .WithMany("EventJournal")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.WorkoutExercise", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Exercise", "Exercise")
+                        .WithMany("WorkoutExercise")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Workout", "Workout")
+                        .WithMany("WorkoutExercise")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
+                {
+                    b.Navigation("DietDishes");
+
+                    b.Navigation("DietProducts");
+
+                    b.Navigation("EventJournal");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Dish", b =>
+                {
+                    b.Navigation("DietDishes");
+
+                    b.Navigation("DishProducts");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Exercise", b =>
+                {
+                    b.Navigation("WorkoutExercise");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Goal", b =>
+                {
+                    b.Navigation("Diets");
+
+                    b.Navigation("Workouts");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Product", b =>
+                {
+                    b.Navigation("DietProducts");
+
+                    b.Navigation("DishProducts");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Trainer", b =>
+                {
+                    b.Navigation("Exercises");
+                });
+
             modelBuilder.Entity("Health.Domain.Models.Entities.User", b =>
                 {
-                    b.Navigation("UserToken")
-                        .IsRequired();
+                    b.Navigation("Goals");
+
+                    b.Navigation("UserToken");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.Workout", b =>
+                {
+                    b.Navigation("EventJournal");
+
+                    b.Navigation("WorkoutExercise");
                 });
 #pragma warning restore 612, 618
         }

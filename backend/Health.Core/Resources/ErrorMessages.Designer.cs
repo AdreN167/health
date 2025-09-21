@@ -61,11 +61,38 @@ namespace Health.Core.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Diet is not found.
+        /// </summary>
+        internal static string DietNotFound {
+            get {
+                return ResourceManager.GetString("DietNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Dish is not found.
         /// </summary>
         internal static string DishNotFound {
             get {
                 return ResourceManager.GetString("DishNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Exercise is not found.
+        /// </summary>
+        internal static string ExerciseNotFound {
+            get {
+                return ResourceManager.GetString("ExerciseNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Goal is not found.
+        /// </summary>
+        internal static string GoalNotFound {
+            get {
+                return ResourceManager.GetString("GoalNotFound", resourceCulture);
             }
         }
         
@@ -133,6 +160,24 @@ namespace Health.Core.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Trainer is not found.
+        /// </summary>
+        internal static string TrainerNotFound {
+            get {
+                return ResourceManager.GetString("TrainerNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Training is not found.
+        /// </summary>
+        internal static string TrainingNotFound {
+            get {
+                return ResourceManager.GetString("TrainingNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на User is already exists.
         /// </summary>
         internal static string UserAlreadyExists {
@@ -147,6 +192,15 @@ namespace Health.Core.Resources {
         internal static string UserNotFound {
             get {
                 return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Workout is not found.
+        /// </summary>
+        internal static string WorkoutNotFound {
+            get {
+                return ResourceManager.GetString("WorkoutNotFound", resourceCulture);
             }
         }
         

@@ -1,11 +1,12 @@
 html {
-  height: 100vh;
+  overflow-x: hidden;
 }
 
 body {
   display: flex;
   flex-direction: column;
   margin: 0;
+  overflow-x: hidden !important;
   height: 100vh;
 }
 
@@ -22,6 +23,7 @@ header {
 
 main {
   flex: 1 0 auto;
+  width: 100vw;
 }
 
 footer {
@@ -40,16 +42,8 @@ h6 {
   margin: 0;
 }
 
-ul,
-li {
-  font-style: none;
-  margin: 0;
-  padding: 0;
-}
-
 * {
   outline: none;
   box-sizing: border-box;
-  transition: 0.2s;
   font-family: Arial, sans-serif;
 }

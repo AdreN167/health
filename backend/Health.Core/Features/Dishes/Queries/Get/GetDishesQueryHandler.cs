@@ -11,18 +11,18 @@ using Microsoft.EntityFrameworkCore;
 namespace Health.Core.Features.Dishes.Queries.Get;
 
 public class GetDishesQueryHandler(ApplicationDbContext context, IMapper mapper)
-    : IRequestHandler<GetDishesQuery, CollectionResponse<DishDto>>
+    : IRequestHandler<GetDishesQuery, CollectionResponse<ExtendedDishDto>>
 {
-    public async Task<CollectionResponse<DishDto>> Handle(GetDishesQuery request, CancellationToken cancellationToken)
+    public async Task<CollectionResponse<ExtendedDishDto>> Handle(GetDishesQuery request, CancellationToken cancellationToken)
     {
         try
         {
             var dishes = await context.Dishes
                 .AsNoTracking()
-                .ProjectTo<DishDto>(mapper.ConfigurationProvider)
+                .ProjectTo<ExtendedDishDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
-            return new CollectionResponse<DishDto> 
+            return new CollectionResponse<ExtendedDishDto> 
             {
                 Data = dishes,
                 Count = dishes.Count
@@ -30,7 +30,7 @@ public class GetDishesQueryHandler(ApplicationDbContext context, IMapper mapper)
         }
         catch (Exception ex)
         {
-            return new CollectionResponse<DishDto>
+            return new CollectionResponse<ExtendedDishDto>
             {
                 ErrorCode = (int)ErrorCode.InternalServerError,
                 ErrorMessage = ErrorMessages.InternalServerError + " -> " + ex.Message

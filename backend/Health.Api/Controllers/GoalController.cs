@@ -4,6 +4,7 @@ using Health.Core.Features.Goals.Commands.Update;
 using Health.Core.Features.Goals.Dtos;
 using Health.Core.Features.Goals.Queries.Get;
 using Health.Core.Features.Goals.Queries.GetExtendedGoalById;
+using Health.Core.Features.Goals.Queries.GetGoalsByUserEmail;
 using Health.Domain.Models.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,16 @@ public class GoalController : ControllerBase
     public async Task<ActionResult<CollectionResponse<GoalDto>>> GetGoals()
     {
         var result = await _mediator.Send(new GetGoalsQuery());
+        return result.ISuccessful
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    //[Authorize(Roles = "User")]
+    [HttpGet("email/{email}")]
+    public async Task<ActionResult<CollectionResponse<GoalDto>>> GetGoalsByUserEmail(string email)
+    {
+        var result = await _mediator.Send(new GetGoalsByUserEmailQuery(email));
         return result.ISuccessful
             ? Ok(result)
             : BadRequest(result);

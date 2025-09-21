@@ -1,6 +1,7 @@
 ﻿using Health.Core.Features.DietEventJournal.Commands.Create;
 using Health.Core.Features.DietEventJournal.Dtos;
 using Health.Core.Features.DietEventJournal.Queries.Get;
+using Health.Core.Features.DietEventJournal.Queries.GetByGoalId;
 using Health.Domain.Models.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,10 +20,20 @@ public class DietEventJournalController : ControllerBase
     }
 
     //[Authorize(Roles = "User")]
-    [HttpGet]
-    public async Task<ActionResult<CollectionResponse<DietEventDto>>> GetDietEvents()
+    [HttpGet("{email}")]
+    public async Task<ActionResult<CollectionResponse<DietEventDto>>> GetDietEvents(string email)
     {
-        var result = await _mediator.Send(new GetDietEventsQuery());
+        var result = await _mediator.Send(new GetDietEventsQuery(email));
+        return result.ISuccessful
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    //[Authorize(Roles = "User")]
+    [HttpGet]
+    public async Task<ActionResult<CollectionResponse<DietEventDto>>> GetDietEventsByGoalId(string email, long goalId)
+    {
+        var result = await _mediator.Send(new GetDietEventsByGoalIdQuery(email, goalId));
         return result.ISuccessful
             ? Ok(result)
             : BadRequest(result);

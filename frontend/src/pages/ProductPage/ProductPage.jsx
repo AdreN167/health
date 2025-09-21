@@ -1,21 +1,39 @@
-import { Button, Stack, TextField } from "@mui/material";
-import AdminLayout from "../../components/AdminLayout/AdminLayout";
+import { Stack, TextField } from "@mui/material";
+import AdminLayout from "../../components/Layout/AdminLayout";
 import { useContext, useEffect, useState } from "react";
 import useInput from "../../hooks/useInput";
-import { UploadFile } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import UploadButton from "../../components/UploadButton/UploadButton";
-import { getProducts } from "../../api/productService";
+import {
+  createProduct,
+  deleteProduct,
+  getProducts,
+  updateProduct,
+} from "../../api/productService";
 import AuthContext from "../../store/AuthContext";
 import DataGrid from "../../components/DataGrid/DataGrid";
+import ProductRow from "../../components/DataGrid/ProdustRow/ProductRow";
+import CreateButton from "../../components/CreateButton/CreateButton";
+import UpdateButton from "../../components/UpdateButton/UpdateButton";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 const errMsg = "Ошибка ввода";
 
 const validateNumber = (num) =>
   num > 0 ? { isValid: true, err: null } : { isValid: false, err: errMsg };
 
+const gridHeaders = [
+  { key: "name", value: "Название" },
+  { key: "calories", value: "Калории" },
+  { key: "proteins", value: "Белки" },
+  { key: "fats", value: "Жиры" },
+  { key: "carbohydrates", value: "Углеводы" },
+  { key: "imageUrl", value: "Картинка", isUnSortable: true },
+  { key: "edit", value: "", isUnSortable: true },
+];
+
 const ProductPage = () => {
   const { token } = useContext(AuthContext);
-
   const product = useInput("Продукт1", (str) =>
     str !== "" && str !== " " && str !== null
       ? { isValid: true, err: null }
@@ -30,24 +48,95 @@ const ProductPage = () => {
       ? { isValid: false, err: "Нужна картинка" }
       : { isValid: true, err: null }
   );
+  const [fetchedProducts, setFetchedProducts] = useState([]);
+  const [productInEdit, setProductInEdit] = useState(null);
 
-  const [fetcedProducts, setFetchedProducts] = useState([]);
+  const get = async () => {
+    try {
+      const data = await getProducts(token);
+      setFetchedProducts(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const get = async () => {
-      try {
-        const data = await getProducts(token);
-        setFetchedProducts(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     get();
   }, []);
 
+  useEffect(() => {
+    if (!productInEdit) return;
+
+    product.setValue(productInEdit.name);
+    calories.setValue(productInEdit.calories);
+    proteins.setValue(productInEdit.proteins);
+    fats.setValue(productInEdit.fats);
+    carbo.setValue(productInEdit.carbohydrates);
+  }, [productInEdit]);
+
+  const createFormData = () => {
+    const formData = new FormData();
+
+    formData.append("name", product.value);
+    formData.append("calories", calories.value);
+    formData.append("fats", fats.value);
+    formData.append("proteins", proteins.value);
+    formData.append("carbohydrates", carbo.value);
+    if (file) {
+      formData.append("image", file.value);
+    }
+
+    return formData;
+  };
+
+  const resetInputs = () => {
+    product.reset();
+    calories.reset();
+    proteins.reset();
+    fats.reset();
+    carbo.reset();
+    file.reset();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = createFormData();
+
+    try {
+      if (productInEdit) {
+        formData.append("id", productInEdit.id);
+        await updateProduct(token, formData);
+        setProductInEdit(null);
+      } else {
+        await createProduct(token, formData);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      resetInputs();
+    }
+
+    await get();
+  };
+
+  const handleEdit = async (id) => {
+    setProductInEdit(fetchedProducts.find((product) => product.id === id));
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteProduct(token, id);
+    } catch (err) {
+      console.log(err);
+    }
+
+    await get();
+  };
+
   return (
     <AdminLayout>
-      <form>
+      <form onSubmit={handleSubmit} style={{ height: 70 }}>
         <Stack direction="row" sx={{ gap: 2 }}>
           <TextField
             label="Название"
@@ -99,9 +188,32 @@ const ProductPage = () => {
           >
             Файл
           </UploadButton>
+          {productInEdit ? (
+            <UpdateButton
+              sx={{ marginLeft: "auto", marginRight: 4 }}
+              type="submit"
+            >
+              <EditOutlinedIcon />
+            </UpdateButton>
+          ) : (
+            <CreateButton
+              sx={{ marginLeft: "auto", marginRight: 4 }}
+              type="submit"
+            >
+              <AddIcon />
+            </CreateButton>
+          )}
         </Stack>
       </form>
-      <DataGrid />
+      <DataGrid
+        headers={gridHeaders}
+        minCellWidth={50}
+        data={fetchedProducts}
+        component={ProductRow}
+        onEditClick={handleEdit}
+        onDeleteClick={handleDelete}
+        rowInEdit={productInEdit}
+      ></DataGrid>
     </AdminLayout>
   );
 };

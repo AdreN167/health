@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Health.Core.Features.Diets.Dtos;
-using Health.Core.Features.Dishes.Dto;
-using Health.Core.Features.Products.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
@@ -30,11 +28,13 @@ public class UpdateListOfFoodCommandHandler(ApplicationDbContext context, IMappe
                 };
             }
 
+            // Продукты
+            var productIds = request.ProductsWithWeight.Keys.Select(long.Parse);
             var products = await context.Products
-                .Where(x => request.ProductIds.Contains(x.Id))
+                .Where(x => productIds.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
-            if (products.Count != request.ProductIds.Count)
+            if (products.Count != request.ProductsWithWeight.Count)
             {
                 return new BaseResponse<ExtendedDietDto>
                 {
@@ -43,11 +43,24 @@ public class UpdateListOfFoodCommandHandler(ApplicationDbContext context, IMappe
                 };
             }
 
+            diet.Products.Clear();
+
+            foreach (var product in products)
+            {
+                diet.DietProducts!.Add(new DietProduct
+                {
+                    Product = product,
+                    Weight = request.ProductsWithWeight[product.Id.ToString()]
+                });
+            }
+
+            // Блюда
+            var dishIds = request.DishesWithWeight.Keys.Select(long.Parse);
             var dishes = await context.Dishes
-                .Where(x => request.DishIds.Contains(x.Id))
+                .Where(x => dishIds.Contains(x.Id))
                 .ToListAsync(cancellationToken);
 
-            if (dishes.Count != request.DishIds.Count)
+            if (dishes.Count != request.DishesWithWeight.Count)
             {
                 return new BaseResponse<ExtendedDietDto>
                 {
@@ -56,18 +69,15 @@ public class UpdateListOfFoodCommandHandler(ApplicationDbContext context, IMappe
                 };
             }
 
-            diet.Products.Clear();
-
-            foreach (var product in products)
-            {
-                diet.Products.Add(product);
-            }
-
             diet.Dishes.Clear();
 
             foreach (var dish in dishes)
             {
-                diet.Dishes.Add(dish);
+                diet.DietDishes!.Add(new DietDish
+                {
+                    Dish = dish,
+                    Weight = request.DishesWithWeight[dish.Id.ToString()]
+                });
             }
 
             await context.SaveChangesAsync(cancellationToken);

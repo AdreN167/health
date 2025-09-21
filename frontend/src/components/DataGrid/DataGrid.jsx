@@ -1,105 +1,194 @@
-import { useState } from "react";
-import "./DataGrid.css"; // Импортируем стили
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import "./DataGrid.less";
+import { apiBaseUrl } from "../../common/constants";
+import RowWithImage from "./RowWithImage/RowWithImage";
+import EdiatableRow from "./EditableRow/EditableRow";
 
-const DataGrid = () => {
-  const [data, setData] = useState([]);
-  const [formData, setFormData] = useState({ id: "", name: "", age: "" });
-  const [isEditing, setIsEditing] = useState(false);
-  const [columnWidths, setColumnWidths] = useState({ name: 150, age: 100 });
+const createHeaders = (headers) => {
+  return headers.map((item) => ({
+    key: item.key,
+    value: item.value,
+    isUnSortable: item.isUnSortable,
+    ref: useRef(),
+  }));
+};
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+const DataGrid = ({
+  headers,
+  minCellWidth,
+  data,
+  component: RowComponent,
+  onEditClick,
+  onDeleteClick,
+  rowInEdit,
+}) => {
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+  const [tableHeight, setTableHeight] = useState("auto");
+  const [activeIndex, setActiveIndex] = useState(null);
+  const tableElement = useRef(null);
+  const columns = createHeaders(headers);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isEditing) {
-      setData(data.map((item) => (item.id === formData.id ? formData : item)));
-      setIsEditing(false);
-    } else {
-      setData([...data, { ...formData, id: 1 }]);
+  const sortedData = useMemo(() => {
+    let sortableItems = [...data];
+    if (sortConfig !== null) {
+      sortableItems.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
     }
-    setFormData({ id: "", name: "", age: "" });
+    return sortableItems;
+  }, [data, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
   };
 
-  const handleEdit = (item) => {
-    setFormData(item);
-    setIsEditing(true);
+  useEffect(() => {
+    setTableHeight(tableElement.current.offsetHeight);
+  }, []);
+
+  const mouseDown = (index) => {
+    setActiveIndex(index);
   };
 
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
-  };
+  const mouseMove = useCallback(
+    (e) => {
+      const gridColumns = columns.map((col, i) => {
+        if (i === activeIndex) {
+          const width = e.clientX - col.ref.current.offsetLeft;
 
-  const handleMouseDown = (column) => (e) => {
-    const startX = e.clientX;
-    const startWidth = columnWidths[column];
+          if (width >= minCellWidth) {
+            return `${width}px`;
+          }
+        }
+        return `${col.ref.current.offsetWidth}px`;
+      });
 
-    const handleMouseMove = (e) => {
-      const newWidth = startWidth + (e.clientX - startX);
-      setColumnWidths((prev) => ({ ...prev, [column]: newWidth }));
+      tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+        " "
+      )}`;
+    },
+    [activeIndex, columns, minCellWidth]
+  );
+
+  const removeListeners = useCallback(() => {
+    window.removeEventListener("mousemove", mouseMove);
+    window.removeEventListener("mouseup", removeListeners);
+  }, [mouseMove]);
+
+  const mouseUp = useCallback(() => {
+    setActiveIndex(null);
+    removeListeners();
+  }, [setActiveIndex, removeListeners]);
+
+  useEffect(() => {
+    if (activeIndex !== null) {
+      window.addEventListener("mousemove", mouseMove);
+      window.addEventListener("mouseup", mouseUp);
+    }
+
+    return () => {
+      removeListeners();
     };
+  }, [activeIndex, mouseMove, mouseUp, removeListeners]);
 
-    const handleMouseUp = () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-  };
+  const handleEdit = (id) => onEditClick(id);
+  const handleDelete = (id) => onDeleteClick(id);
 
   return (
-    <div>
-      <h1>Custom DataGrid</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="age"
-          placeholder="Age"
-          value={formData.age}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">{isEditing ? "Update" : "Add"}</button>
-      </form>
-
-      <table>
-        <thead>
-          <tr>
-            <th style={{ width: columnWidths.name }}>
-              Name
-              <span className="resizer" onMouseDown={handleMouseDown("name")} />
-            </th>
-            <th style={{ width: columnWidths.age }}>
-              Age
-              <span className="resizer" onMouseDown={handleMouseDown("age")} />
-            </th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr key={item.id}>
-              <td>{item.name}</td>
-              <td>{item.age}</td>
-              <td>
-                <button onClick={() => handleEdit(item)}>Edit</button>
-                <button onClick={() => handleDelete(item.id)}>Delete</button>
-              </td>
+    <div className="container">
+      <div className="table-wrapper">
+        <table
+          className="resizeable-table table"
+          ref={tableElement}
+          style={{
+            gridTemplateColumns: columns
+              .map((_) => "minmax(100px, 1fr)")
+              .join(" "),
+          }}
+        >
+          <thead className="thead">
+            <tr className="tr">
+              {columns.map(({ ref, value, key, isUnSortable }, i) => (
+                <th
+                  className="th"
+                  ref={ref}
+                  key={value}
+                  style={{ cursor: !isUnSortable && "pointer" }}
+                  onClick={() => (!isUnSortable ? requestSort(key) : null)}
+                >
+                  <span className="span">{value}</span>
+                  <div
+                    style={{ height: tableHeight }}
+                    onMouseDown={() => mouseDown(i)}
+                    className={`resize-handle ${
+                      activeIndex === i ? "active" : "idle"
+                    }`}
+                  />
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="tbody">
+            {sortedData &&
+              sortedData.map((item, i) =>
+                item.imageUrl !== null && item.imageUrl !== undefined ? (
+                  <tr
+                    key={i}
+                    className={
+                      rowInEdit?.id === item.id ? "table-wrapper__in-edit" : ""
+                    }
+                  >
+                    <EdiatableRow
+                      id={item.id}
+                      onEditClick={handleEdit}
+                      onDeleteClick={handleDelete}
+                    >
+                      <RowWithImage
+                        imageUrl={
+                          item.imageUrl !== "" ? apiBaseUrl + item.imageUrl : ""
+                        }
+                      >
+                        <RowComponent content={item} />
+                      </RowWithImage>
+                    </EdiatableRow>
+                  </tr>
+                ) : (
+                  <tr
+                    key={i}
+                    className={
+                      rowInEdit?.id === item.id ? "table-wrapper__in-edit" : ""
+                    }
+                  >
+                    <EdiatableRow
+                      id={item.id}
+                      onEditClick={handleEdit}
+                      onDeleteClick={handleDelete}
+                    >
+                      <RowComponent content={item} />
+                    </EdiatableRow>
+                  </tr>
+                )
+              )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

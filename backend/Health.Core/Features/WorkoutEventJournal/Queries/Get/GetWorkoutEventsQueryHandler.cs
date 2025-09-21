@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Health.Core.Features.Products.Dto;
-using Health.Core.Features.Products.Queries.Get;
 using Health.Core.Features.WorkoutEventJournal.Dtos;
 using Health.Core.Resources;
 using Health.DAL;
@@ -21,6 +19,7 @@ public class GetWorkoutEventsQueryHandler(ApplicationDbContext context, IMapper 
         {
             var events = await context.WorkoutEvents
                 .AsNoTracking()
+                .Where(de => de.Workout.Goal.User.Email.Equals(request.Email))
                 .ProjectTo<WorkoutEventDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

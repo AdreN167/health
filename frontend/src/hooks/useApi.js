@@ -1,8 +1,9 @@
 import axios from "axios";
+import { apiBaseUrl } from "../common/constants";
 
 const useApi = (token) => {
   const api = axios.create({
-    baseURL: "http://localhost:5140",
+    baseURL: apiBaseUrl,
     timeout: 10000,
   });
 

@@ -24,6 +24,15 @@ public class RegistrationCommandHandler(ApplicationDbContext context, IPasswordS
             };
         }
 
+        if (request.Age <= 0 || request.Height <= 0 || request.Weight <= 0)
+        {
+            return new BaseResponse<RegistrationDto>()
+            {
+                ErrorMessage = ErrorMessages.InvalidRequest,
+                ErrorCode = (int)ErrorCode.InvalidRequest
+            };
+        }
+
         try
         {
             var user = await context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
@@ -41,7 +50,10 @@ public class RegistrationCommandHandler(ApplicationDbContext context, IPasswordS
             {
                 Email = request.Email,
                 Password = hashUserPassword,
-                Role = Role.User
+                Role = Role.User,
+                Age = request.Age,
+                Height = request.Height,
+                Weight = request.Weight,
             };
 
             await context.Users.AddAsync(user, cancellationToken);

@@ -25,36 +25,6 @@ namespace Health.DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DietDish", b =>
-                {
-                    b.Property<long>("DietsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("DishesId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DietsId", "DishesId");
-
-                    b.HasIndex("DishesId");
-
-                    b.ToTable("DietDish");
-                });
-
-            modelBuilder.Entity("DietProduct", b =>
-                {
-                    b.Property<long>("DietsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProductsId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("DietsId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("DietProduct");
-                });
-
             modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
                 {
                     b.Property<long>("Id")
@@ -76,6 +46,24 @@ namespace Health.DAL.Migrations
                     b.HasIndex("GoalId");
 
                     b.ToTable("Diets");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietDish", b =>
+                {
+                    b.Property<long>("DietId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DishId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("DietId", "DishId");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("DietDish", (string)null);
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.DietEvent", b =>
@@ -109,6 +97,24 @@ namespace Health.DAL.Migrations
                     b.HasIndex("DietId");
 
                     b.ToTable("DietEvents");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietProduct", b =>
+                {
+                    b.Property<long>("DietId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("DietId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("DietProduct", (string)null);
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Dish", b =>
@@ -170,8 +176,8 @@ namespace Health.DAL.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -284,16 +290,25 @@ namespace Health.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<int>("Age")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Weight")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -392,36 +407,6 @@ namespace Health.DAL.Migrations
                     b.ToTable("WorkoutExercise", (string)null);
                 });
 
-            modelBuilder.Entity("DietDish", b =>
-                {
-                    b.HasOne("Health.Domain.Models.Entities.Diet", null)
-                        .WithMany()
-                        .HasForeignKey("DietsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Health.Domain.Models.Entities.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DietProduct", b =>
-                {
-                    b.HasOne("Health.Domain.Models.Entities.Diet", null)
-                        .WithMany()
-                        .HasForeignKey("DietsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Health.Domain.Models.Entities.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
                 {
                     b.HasOne("Health.Domain.Models.Entities.Goal", "Goal")
@@ -433,6 +418,25 @@ namespace Health.DAL.Migrations
                     b.Navigation("Goal");
                 });
 
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietDish", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Diet", "Diet")
+                        .WithMany("DietDishes")
+                        .HasForeignKey("DietId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Dish", "Dish")
+                        .WithMany("DietDishes")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diet");
+
+                    b.Navigation("Dish");
+                });
+
             modelBuilder.Entity("Health.Domain.Models.Entities.DietEvent", b =>
                 {
                     b.HasOne("Health.Domain.Models.Entities.Diet", "Diet")
@@ -442,6 +446,25 @@ namespace Health.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Diet");
+                });
+
+            modelBuilder.Entity("Health.Domain.Models.Entities.DietProduct", b =>
+                {
+                    b.HasOne("Health.Domain.Models.Entities.Diet", "Diet")
+                        .WithMany("DietProducts")
+                        .HasForeignKey("DietId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Health.Domain.Models.Entities.Product", "Product")
+                        .WithMany("DietProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Diet");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.DishProduct", b =>
@@ -538,11 +561,17 @@ namespace Health.DAL.Migrations
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Diet", b =>
                 {
+                    b.Navigation("DietDishes");
+
+                    b.Navigation("DietProducts");
+
                     b.Navigation("EventJournal");
                 });
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Dish", b =>
                 {
+                    b.Navigation("DietDishes");
+
                     b.Navigation("DishProducts");
                 });
 
@@ -560,6 +589,8 @@ namespace Health.DAL.Migrations
 
             modelBuilder.Entity("Health.Domain.Models.Entities.Product", b =>
                 {
+                    b.Navigation("DietProducts");
+
                     b.Navigation("DishProducts");
                 });
 

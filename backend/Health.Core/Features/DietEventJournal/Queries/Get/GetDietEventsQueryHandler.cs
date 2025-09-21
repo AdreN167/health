@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Health.Core.Features.DietEventJournal.Queries.Get;
 
-public class GetDietEventsQueryHandler(ApplicationDbContext context, IMapper mapper)
+public class GetDietEventsByGoalIdQueryHandler(ApplicationDbContext context, IMapper mapper)
     : IRequestHandler<GetDietEventsQuery, CollectionResponse<DietEventDto>>
 {
     public async Task<CollectionResponse<DietEventDto>> Handle(GetDietEventsQuery request, CancellationToken cancellationToken)
@@ -19,6 +19,7 @@ public class GetDietEventsQueryHandler(ApplicationDbContext context, IMapper map
         {
             var events = await context.DietEvents
                 .AsNoTracking()
+                .Where(de => de.Diet.Goal.User.Email.Equals(request.Email))
                 .ProjectTo<DietEventDto>(mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 

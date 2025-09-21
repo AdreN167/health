@@ -11,5 +11,6 @@ public class Dish : IEntity
     public virtual ICollection<Product>? Products { get; set; }
     public virtual ICollection<Diet>? Diets { get; set; }
     public virtual ICollection<DishProduct>? DishProducts { get; set; }
+    public virtual ICollection<DietDish>? DietDishes { get; set; }
 }
 

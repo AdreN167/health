@@ -4,11 +4,14 @@ using Health.Core.Features.Diets.Dtos;
 using Health.Core.Features.Dishes.Dto;
 using Health.Core.Resources;
 using Health.DAL;
+using Health.Domain.Models.Common;
 using Health.Domain.Models.Entities;
 using Health.Domain.Models.Enums;
 using Health.Domain.Models.Response;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
+using System.Runtime.Intrinsics.Arm;
 
 namespace Health.Core.Features.DietEventJournal.Commands.Create;
 
@@ -28,7 +31,8 @@ public class CreateDietEventCommandHandler(ApplicationDbContext context, IMapper
                 };
             }
 
-            var diet = await context.Diets.FindAsync([request.DietId], cancellationToken);
+            var dietEntity = await context.Diets.FindAsync([request.DietId], cancellationToken);
+            var diet = mapper.Map<ExtendedDietDto>(dietEntity);
 
             if (diet == null)
             {
@@ -68,9 +72,7 @@ public class CreateDietEventCommandHandler(ApplicationDbContext context, IMapper
             if (request.DishIds != null && request.DishIds.Count != 0 && diet.Dishes != null)
             {
                 var dishes = diet.Dishes
-                    .AsQueryable()
                     .Where(dish => request.DishIds.Contains(dish.Id))
-                    .ProjectTo<ExtendedDishDto>(mapper.ConfigurationProvider)
                     .ToList();
 
                 if (dishes.Count != request.DishIds.Count)
@@ -91,7 +93,7 @@ public class CreateDietEventCommandHandler(ApplicationDbContext context, IMapper
             var newEvent = new DietEvent
             {
                 Date = date,
-                Diet = diet,
+                Diet = dietEntity,
                 Calories = calories,
                 Proteins = proteins,
                 Fats = fats,

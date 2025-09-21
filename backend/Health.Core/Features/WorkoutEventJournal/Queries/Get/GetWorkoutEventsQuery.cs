@@ -4,5 +4,5 @@ using MediatR;
 
 namespace Health.Core.Features.WorkoutEventJournal.Queries.Get;
 
-public record GetWorkoutEventsQuery : IRequest<CollectionResponse<WorkoutEventDto>>;
+public record GetWorkoutEventsQuery(string Email) : IRequest<CollectionResponse<WorkoutEventDto>>;
 

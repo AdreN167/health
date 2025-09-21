@@ -73,6 +73,46 @@ public class ApplicationDbContext : DbContext
                     dp.ToTable("DishProduct");
                 });
 
+        modelBuilder
+            .Entity<Dish>()
+            .HasMany(diet => diet.Diets)
+            .WithMany(dish => dish.Dishes)
+            .UsingEntity<DietDish>(
+                dd => dd
+                    .HasOne(x => x.Diet)
+                    .WithMany(y => y.DietDishes)
+                    .HasForeignKey(x => x.DietId),
+                dd => dd
+                    .HasOne(x => x.Dish)
+                    .WithMany(y => y.DietDishes)
+                    .HasForeignKey(x => x.DishId),
+                dd =>
+                {
+                    dd.Property(x => x.Weight).IsRequired();
+                    dd.HasKey(x => new { x.DietId, x.DishId });
+                    dd.ToTable("DietDish");
+                });
+
+        modelBuilder
+            .Entity<Product>()
+            .HasMany(diet => diet.Diets)
+            .WithMany(dish => dish.Products)
+            .UsingEntity<DietProduct>(
+                dp => dp
+                    .HasOne(x => x.Diet)
+                    .WithMany(y => y.DietProducts)
+                    .HasForeignKey(x => x.DietId),
+                dp => dp
+                    .HasOne(x => x.Product)
+                    .WithMany(y => y.DietProducts)
+                    .HasForeignKey(x => x.ProductId),
+                dp =>
+                {
+                    dp.Property(x => x.Weight).IsRequired();
+                    dp.HasKey(x => new { x.DietId, x.ProductId });
+                    dp.ToTable("DietProduct");
+                });
+
         base.OnModelCreating(modelBuilder);
     }
 }

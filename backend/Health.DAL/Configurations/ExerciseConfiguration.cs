@@ -10,7 +10,7 @@ public class ExerciseConfiguration : IEntityTypeConfiguration<Exercise>
     {
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
         builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
-        builder.Property(x => x.Description).HasMaxLength(200).IsRequired();
+        builder.Property(x => x.Description).HasMaxLength(5000).IsRequired();
         builder.Property(x => x.CaloriesBurned).IsRequired();
     }
 }

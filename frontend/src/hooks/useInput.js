@@ -6,7 +6,9 @@ const useInput = (initialValue, validator) => {
 
   const handleChange = (e) => {
     const newValue =
-      e.target.files !== null ? e.target.files[0] : e.target.value;
+      e.target.files !== null && e.target.files !== undefined
+        ? e.target.files[0]
+        : e.target.value;
     setValue(newValue);
 
     const { isValid, err } = validator(newValue);
@@ -14,15 +16,24 @@ const useInput = (initialValue, validator) => {
     setError(() => (isValid ? null : err));
   };
 
+  const handleChangeDate = (newDate) => {
+    setValue(newDate);
+    const { isValid, err } = validator(newValue);
+    setError(() => (isValid ? null : err));
+  };
+
   const reset = () => {
-    setValue(initialValue), setError(null);
+    setValue(initialValue);
+    setError(null);
   };
 
   return {
     value,
     error,
     onchange: handleChange,
+    onChangeData: handleChangeDate,
     reset,
+    setValue,
   };
 };
 
